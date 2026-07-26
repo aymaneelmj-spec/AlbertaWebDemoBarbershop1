@@ -1,0 +1,21 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[886],{9214:function(e,t,n){Promise.resolve().then(n.bind(n,7613))},7613:function(e,t,n){"use strict";n.r(t),n.d(t,{default:function(){return l}});var r=n(7437),a=n(2265);/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */let i=(0,n(8030).Z)("CircleCheckBig",[["path",{d:"M22 11.08V12a10 10 0 1 1-5.93-9.14",key:"g774vq"}],["path",{d:"m9 11 3 3L22 4",key:"1pflzl"}]]);function l(){let[e,t]=(0,a.useState)({name:"",phone:"",service:"Haircut",date:"",time:""}),[n,l]=(0,a.useState)(""),o=n=>t({...e,[n.target.name]:n.target.value}),s=async n=>{n.preventDefault(),l("Booking in progress...");let r=await fetch("/api/book",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(e)});(await r.json()).success?(l("Booking confirmed! We will call you shortly."),t({name:"",phone:"",service:"Haircut",date:"",time:""})):l("Error booking. Please call us.")};return(0,r.jsx)("div",{className:"min-h-screen pt-32 pb-20 px-6 flex justify-center",children:(0,r.jsxs)("div",{className:"bg-dark2 p-10 rounded-2xl border border-gold/20 max-w-xl w-full",children:[(0,r.jsx)("h1",{className:"text-4xl font-bold mb-2 text-center font-cinzel text-gold",children:"Book an Appointment"}),(0,r.jsx)("p",{className:"text-gray-400 text-center mb-8",children:"Fill out the form to secure your slot."}),(0,r.jsxs)("form",{onSubmit:s,className:"flex flex-col gap-4",children:[(0,r.jsx)("input",{type:"text",name:"name",placeholder:"Full Name",required:!0,value:e.name,onChange:o,className:"input-field"}),(0,r.jsx)("input",{type:"tel",name:"phone",placeholder:"Phone Number",required:!0,value:e.phone,onChange:o,className:"input-field"}),(0,r.jsxs)("select",{name:"service",value:e.service,onChange:o,className:"input-field",children:[(0,r.jsx)("option",{children:"Haircut"}),(0,r.jsx)("option",{children:"Skin Fade"}),(0,r.jsx)("option",{children:"Beard Trim"}),(0,r.jsx)("option",{children:"Haircut & Beard"})]}),(0,r.jsx)("input",{type:"date",name:"date",required:!0,value:e.date,onChange:o,className:"input-field"}),(0,r.jsx)("input",{type:"time",name:"time",required:!0,value:e.time,onChange:o,className:"input-field"}),(0,r.jsx)("button",{type:"submit",className:"btn-3d w-full mt-4",children:"Confirm Booking"})]}),n&&(0,r.jsxs)("div",{className:"mt-6 text-center text-gold flex items-center justify-center gap-2",children:[(0,r.jsx)(i,{}),n]})]})})}},8030:function(e,t,n){"use strict";n.d(t,{Z:function(){return s}});var r=n(2265);/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */let a=e=>e.replace(/([a-z0-9])([A-Z])/g,"$1-$2").toLowerCase(),i=function(){for(var e=arguments.length,t=Array(e),n=0;n<e;n++)t[n]=arguments[n];return t.filter((e,t,n)=>!!e&&n.indexOf(e)===t).join(" ")};/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */var l={xmlns:"http://www.w3.org/2000/svg",width:24,height:24,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"};/**
+ * @license lucide-react v0.378.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */let o=(0,r.forwardRef)((e,t)=>{let{color:n="currentColor",size:a=24,strokeWidth:o=2,absoluteStrokeWidth:s,className:c="",children:u,iconNode:d,...m}=e;return(0,r.createElement)("svg",{ref:t,...l,width:a,height:a,stroke:n,strokeWidth:s?24*Number(o)/Number(a):o,className:i("lucide",c),...m},[...d.map(e=>{let[t,n]=e;return(0,r.createElement)(t,n)}),...Array.isArray(u)?u:[u]])}),s=(e,t)=>{let n=(0,r.forwardRef)((n,l)=>{let{className:s,...c}=n;return(0,r.createElement)(o,{ref:l,iconNode:t,className:i("lucide-".concat(a(e)),s),...c})});return n.displayName="".concat(e),n}}},function(e){e.O(0,[971,23,744],function(){return e(e.s=9214)}),_N_E=e.O()}]);
