@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Poppins:wght@300;400;500;600&display=swap');
+@tailwind base; @tailwind components; @tailwind utilities;
+body { font-family: 'Poppins', sans-serif; background: #0a0a0a; color: #fff; }
+h1,h2,h3,.font-cinzel { font-family: 'Cinzel', serif; }
+.btn-3d { background: linear-gradient(180deg, #e6c247 0); color: #111; padding: 18px 45px; border-radius: 8px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 6px 0 #8a6a14, 0 12px 20px rgba(0,0,0,0.5); transition: all 0.15s ease; display: inline-block; cursor: pointer; border: none; }
+.btn-3d:hover { transform: translateY(2px); box-shadow: 0 4px 0 #8a6a14, 0 8px 15px rgba(0,0,0,0.6); }
+.btn-3d:active { transform: translateY(6px); box-shadow: 0 0 0 #8a6a14, 0 2px 5px rgba(0,0,0,0.5); }
+.gradient-text { background: linear-gradient(-45deg, #d4af37, #fff, #d4af37, #aa8c2c); background-size: 400; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: gradient 5s ease infinite; }
+@keyframes gradient { 0 0; } 50 100; } 100 0; } }
+.input-field { background: #141414; border: 1px solid #333; padding: 14px; border-radius: 6px; color: #fff; width: 100 none; transition: border 0.3s; font-family: 'Poppins', sans-serif; }
+.input-field:focus { border-color: #d4af37; }
