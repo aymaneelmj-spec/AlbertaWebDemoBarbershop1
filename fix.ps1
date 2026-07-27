@@ -1,4 +1,68 @@
-﻿'use client';
+# fix15.ps1
+# Right-click this file and select "Run with PowerShell"
+
+ $css = @"
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Poppins:wght@300;400;500;600&display=swap');
+@tailwind base; @tailwind components; @tailwind utilities;
+body { font-family: 'Poppins', sans-serif; background: #0a0a0a; color: #fff; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+h1,h2,h3,.font-cinzel { font-family: 'Cinzel', serif; }
+.btn-3d { background: linear-gradient(180deg, #e6c247 0%, #c9981b 100%); color: #111; padding: 18px 45px; border-radius: 8px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 6px 0 #8a6a14, 0 12px 20px rgba(0,0,0,0.5); transition: all 0.15s ease; display: inline-block; cursor: pointer; border: none; }
+.btn-3d:hover { transform: translateY(2px); box-shadow: 0 4px 0 #8a6a14, 0 8px 15px rgba(0,0,0,0.6); }
+.btn-3d:active { transform: translateY(6px); box-shadow: 0 0 0 #8a6a14, 0 2px 5px rgba(0,0,0,0.5); }
+.input-field { background: #141414; border: 1px solid #333; padding: 14px; border-radius: 6px; color: #fff; width: 100%; outline: none; transition: border 0.3s; font-family: 'Poppins', sans-serif; }
+.input-field:focus { border-color: #d4af37; }
+.hero-bg { background-image: url('/mainBackground.jpg'); background-size: cover; background-position: center; }
+@media (max-width: 768px) { .hero-bg { background-image: url('/mainBackgroundMobile.jpg') !important; } }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+"@
+Set-Content -Path "app\globals.css" -Value $css -Encoding UTF8 -Force
+
+ $navbar = @"
+'use client';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+export default function Navbar() {
+  const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  useEffect(() => {
+    const controlNavbar = () => {
+      if (typeof window !== 'undefined') {
+        if (window.scrollY > lastScrollY && window.scrollY > 100) { setShow(false); } 
+        else { setShow(true); }
+        setLastScrollY(window.scrollY);
+      }
+    };
+    window.addEventListener('scroll', controlNavbar);
+    return () => window.removeEventListener('scroll', controlNavbar);
+  }, [lastScrollY]);
+  return (
+    <nav className={`fixed w-full bg-black/80 backdrop-blur-md z-50 border-b border-gold/20 transition-transform duration-300 ${show ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className="max-w-7xl mx-auto flex justify-between items-center p-5">
+        <Link href="/" className="text-2xl font-bold text-gold font-cinzel">FADED<span className="text-white ml-2">BARBERSHOP</span></Link>
+        <div className="hidden md:flex gap-8 items-center">
+          <Link href="/" className="hover:text-gold transition">Home</Link>
+          <Link href="/#services" className="hover:text-gold transition">Services</Link>
+          <Link href="/book" className="btn-3d !py-2 !px-6 !text-sm">Book Now</Link>
+        </div>
+        <button className="md:hidden text-gold text-2xl" onClick={() => setOpen(!open)}>☰</button>
+      </div>
+      {open && (
+        <div className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-md flex flex-col items-center gap-6 py-8 border-b border-gold/20">
+          <Link href="/" onClick={()=>setOpen(false)} className="text-white text-lg hover:text-gold transition">Home</Link>
+          <Link href="/#services" onClick={()=>setOpen(false)} className="text-white text-lg hover:text-gold transition">Services</Link>
+          <Link href="/book" onClick={()=>setOpen(false)} className="btn-3d !py-2 !px-6 !text-sm">Book Now</Link>
+        </div>
+      )}
+    </nav>
+  );
+}
+"@
+Set-Content -Path "components\Navbar.jsx" -Value $navbar -Encoding UTF8 -Force
+
+ $page = @"
+'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath, Volume2, VolumeX, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -40,15 +104,15 @@ const hours = [
 ];
 
 const reviews = [
-  { name: "Vernen Gay Agustin", text: "Weâ€™ve been searching for the best barber shop in the area for a while, and this place exceeded our expectations. Great service, clean space, and such a welcoming vibe. My kids walked out happy and confident. Highly recommend to any parents.", rating: 5, date: "3 months ago" },
+  { name: "Vernen Gay Agustin", text: "We’ve been searching for the best barber shop in the area for a while, and this place exceeded our expectations. Great service, clean space, and such a welcoming vibe. My kids walked out happy and confident. Highly recommend to any parents.", rating: 5, date: "3 months ago" },
   { name: "Tara Balaski", text: "My son got his hair done today, and quite a bit was taken off. He made a masterpiece of my son's hair. Absolutely love it! Incredible service, thank you so much!", rating: 5, date: "a month ago" },
   { name: "Santana D", text: "My husband came in today to get just his hair trim (Skin Fade) and he said the experience was great! The barber was super friendly, did a great job! The barber shop was really nice and clean with plenty of seating. It is WALK-IN only.", rating: 5, date: "6 months ago" },
   { name: "Zsarina Balmes", text: "My husband and I recently visited this barber shop, and we had a great experience! The place is clean, welcoming, and has a really nice vibe. The barber did an amazing job giving us the exact haircuts we wanted.", rating: 5, date: "4 months ago" },
-  { name: "SHABISKY", text: "I got a taper and a razor cut for my hair and beard, very happy with the outcome, he was very polite and easy going. Double checked the haircut I wanted and kept asking if I needed anything else. 10/10 to Amin heâ€™s honestly a hard worker!", rating: 5, date: "2 months ago" },
-  { name: "Jodi Healey", text: "Took my dad to this barbershop and we couldnâ€™t be happier with the result! The barber did a fantastic job every detail was perfectly executed and itâ€™s clear they take pride in their craft.", rating: 5, date: "8 months ago" },
+  { name: "SHABISKY", text: "I got a taper and a razor cut for my hair and beard, very happy with the outcome, he was very polite and easy going. Double checked the haircut I wanted and kept asking if I needed anything else. 10/10 to Amin he’s honestly a hard worker!", rating: 5, date: "2 months ago" },
+  { name: "Jodi Healey", text: "Took my dad to this barbershop and we couldn’t be happier with the result! The barber did a fantastic job every detail was perfectly executed and it’s clear they take pride in their craft.", rating: 5, date: "8 months ago" },
   { name: "Denise Brake", text: "We were walk in customers today, warmly welcomed by Joseph and he was up for the challenge!", rating: 5, date: "4 months ago" },
-  { name: "Michael Landry", text: "Super professional, love how fast and precise the guys are. Very friendly, and a pleasure to see them every time! Best barbershop in the area and Iâ€™ve been to a few!!!", rating: 5, date: "8 months ago" },
-  { name: "Salimah Karmali", text: "Yusuf was very professional and listen to what my son wanted. Delivered with 5 stars!! He left one happy kid with a big smile, saying â€˜Itâ€™s exactly what I wanted!!â€ Thank you!", rating: 5, date: "2 months ago" },
+  { name: "Michael Landry", text: "Super professional, love how fast and precise the guys are. Very friendly, and a pleasure to see them every time! Best barbershop in the area and I’ve been to a few!!!", rating: 5, date: "8 months ago" },
+  { name: "Salimah Karmali", text: "Yusuf was very professional and listen to what my son wanted. Delivered with 5 stars!! He left one happy kid with a big smile, saying ‘It’s exactly what I wanted!!” Thank you!", rating: 5, date: "2 months ago" },
   { name: "Becca R", text: "Excellent barber for my toddler, stylist had him giggling right away and he sat through a haircut with no problems. Cool place with a foosball table that kept the little ones entertained and he left looking dapper.", rating: 5, date: "3 months ago" }
 ];
 
@@ -64,7 +128,7 @@ const FAQItem = ({ q, a }) => {
     <div className="bg-dark2 p-5 rounded-lg border border-gold/10 mb-4">
       <button className="flex justify-between items-center w-full text-left" onClick={() => setOpen(!open)}>
         <h4 className="text-lg font-semibold text-gold">{q}</h4>
-        <ChevronDown className={	ext-gold transition-transform } />
+        <ChevronDown className={`text-gold transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && <p className="mt-4 text-gray-400">{a}</p>}
     </div>
@@ -197,7 +261,7 @@ export default function Home() {
           <div ref={imagesRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 px-10 no-scrollbar">
             {images.map((img, i) => (
               <motion.div key={i} initial={{opacity:0, scale:0.9}} whileInView={{opacity:1, scale:1}} viewport={{once:true}} transition={{duration:0.5}} className="min-w-[300px] h-[400px] rounded-2xl overflow-hidden border-2 border-gold/20 hover:border-gold/60 transition-all snap-center">
-                <img src={img} alt={Faded Barbershop } className="w-full h-full object-cover" />
+                <img src={img} alt={`Faded Barbershop ${i+1}`} className="w-full h-full object-cover" />
               </motion.div>
             ))}
           </div>
@@ -300,9 +364,15 @@ export default function Home() {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-white/5 text-center text-gray-500 text-sm">
-          Â© {new Date().getFullYear()} Faded Barbershop. All Rights Reserved.
+          © {new Date().getFullYear()} Faded Barbershop. All Rights Reserved.
         </div>
       </footer>
     </div>
   );
 }
+"@
+Set-Content -Path "app\page.jsx" -Value $page -Encoding UTF8 -Force
+
+Write-Host "==========================================" -ForegroundColor Green
+Write-Host "SUCCESS! All files updated perfectly." -ForegroundColor Green
+Write-Host "==========================================" -ForegroundColor Green
