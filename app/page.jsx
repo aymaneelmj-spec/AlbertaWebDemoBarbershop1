@@ -104,13 +104,22 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
+    // Start audio after 3 seconds
+    const audioTimer = setTimeout(() => {
       if (audioRef.current) {
         audioRef.current.play().catch(e => console.log("Autoplay blocked"));
       }
+    }, 3000);
+
+    // Hide loading spinner after 4 seconds
+    const loadingTimer = setTimeout(() => {
+      setIsLoading(false);
     }, 4000);
-    return () => clearTimeout(timer);
+
+    return () => {
+      clearTimeout(audioTimer);
+      clearTimeout(loadingTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -134,6 +143,10 @@ export default function Home() {
                 <Scissors className="text-gold w-12 h-12" />
               </motion.div>
             ))}
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }} className="z-10 text-center">
+              <h1 className="text-5xl font-bold text-gold font-cinzel">FADED</h1>
+              <p className="text-white text-2xl tracking-widest font-cinzel">BARBERSHOP</p>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -249,7 +262,7 @@ export default function Home() {
 
       <section id="faq" className="py-24 bg-dark2 px-6">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-cinzel">Frequently Asked Questions</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-cinzel">FAQ</h2>
           {faqs.map((f, i) => <FAQItem key={i} q={f.q} a={f.a} />)}
         </div>
       </section>
