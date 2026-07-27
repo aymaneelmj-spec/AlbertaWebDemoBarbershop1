@@ -104,20 +104,26 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // Attempt to play audio after 2 seconds
+    const audio = audioRef.current;
+    
+    // Attempt to play at 2 seconds
     const audioTimer = setTimeout(() => {
-      if (audioRef.current) {
-        audioRef.current.play().catch(err => {
-          // Autoplay was blocked by browser. Listen for first user interaction.
-          const playOnInteract = () => {
-            audioRef.current.play().catch(e => console.log("Still blocked"));
-            window.removeEventListener('click', playOnInteract);
-            window.removeEventListener('touchstart', playOnInteract);
-            window.removeEventListener('scroll', playOnInteract);
+      if (audio) {
+        audio.play().catch(() => {
+          // If blocked, listen for the absolute first interaction on the window
+          const startAudio = () => {
+            if (audio) {
+              audio.play().catch(e => console.log("Still blocked", e));
+            }
+            window.removeEventListener('click', startAudio);
+            window.removeEventListener('touchend', startAudio);
+            window.removeEventListener('keydown', startAudio);
+            window.removeEventListener('wheel', startAudio);
           };
-          window.addEventListener('click', playOnInteract);
-          window.addEventListener('touchstart', playOnInteract);
-          window.addEventListener('scroll', playOnInteract);
+          window.addEventListener('click', startAudio);
+          window.addEventListener('touchend', startAudio);
+          window.addEventListener('keydown', startAudio);
+          window.addEventListener('wheel', startAudio);
         });
       }
     }, 2000);
@@ -140,7 +146,7 @@ export default function Home() {
 
   return (
     <div>
-      <audio ref={audioRef} src="/audiobarber.wav" loop />
+      <audio ref={audioRef} src="/audiobarber.wav" loop preload="auto" />
       <motion.button 
         whileHover={{ scale: 1.1 }} 
         whileTap={{ scale: 0.9 }} 
