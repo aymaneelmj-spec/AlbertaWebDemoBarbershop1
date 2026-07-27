@@ -104,11 +104,23 @@ export default function Home() {
   };
 
   useEffect(() => {
+    // Attempt to play audio after 2 seconds
     const audioTimer = setTimeout(() => {
       if (audioRef.current) {
-        audioRef.current.play().catch(e => console.log("Autoplay blocked"));
+        audioRef.current.play().catch(err => {
+          // Autoplay was blocked by browser. Listen for first user interaction.
+          const playOnInteract = () => {
+            audioRef.current.play().catch(e => console.log("Still blocked"));
+            window.removeEventListener('click', playOnInteract);
+            window.removeEventListener('touchstart', playOnInteract);
+            window.removeEventListener('scroll', playOnInteract);
+          };
+          window.addEventListener('click', playOnInteract);
+          window.addEventListener('touchstart', playOnInteract);
+          window.addEventListener('scroll', playOnInteract);
+        });
       }
-    }, 2000); // Starts at exactly 2 seconds
+    }, 2000);
 
     const loadingTimer = setTimeout(() => {
       setIsLoading(false);
@@ -160,8 +172,12 @@ export default function Home() {
         <div className="z-20 px-6 flex flex-col items-center justify-end min-h-screen pb-24 pt-32">
           <motion.p initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:0.5}} className="text-2xl md:text-4xl text-white uppercase tracking-widest mb-8 drop-shadow-[0_2px_10px_rgba(0,0,0,1)] font-bold">Where Quality Meets Service</motion.p>
           <motion.div initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:1}} className="flex flex-col gap-4 items-center text-white mb-10">
-            <p className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-6 py-3 rounded-full border border-gold/30 font-semibold drop-shadow-lg"><MapPin className="text-gold" /> 6610 127 Ave NW, Edmonton, AB</p>
-            <p className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-6 py-3 rounded-full border border-gold/30 font-semibold drop-shadow-lg"><Phone className="text-gold" /> +1 780-665-6465</p>
+            <a href="https://www.google.com/maps/place/Faded+Barbershop/@54.832399,-112.5333398,7z/data=!4m6!3m5!1s0x53a023cf8bd7bd03:0xb41bd5e899d57e96!8m2!3d53.5853054!4d-113.4435655!16s%2Fg%2F11fll5qhc8?entry=ttu&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-6 py-3 rounded-full border border-gold/30 font-semibold drop-shadow-lg hover:border-gold transition-colors cursor-pointer">
+              <MapPin className="text-gold" /> 6610 127 Ave NW, Edmonton, AB
+            </a>
+            <a href="tel:+17806656465" className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-6 py-3 rounded-full border border-gold/30 font-semibold drop-shadow-lg hover:border-gold transition-colors cursor-pointer">
+              <Phone className="text-gold" /> +1 780-665-6465
+            </a>
           </motion.div>
           <motion.div initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:1.5}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link href="/book" className="btn-3d">Book Appointment</Link>
