@@ -1,16 +1,35 @@
 @echo off
 chcp 65001 >nul
-title Fixing Loading Icons, Audio Format, and Background
+title Fixing Backgrounds, Readability, and Scrollable Services
 
-echo Generating fix script (using SVG icons instead of emojis)...
+echo Generating premium update script...
 
-> fix.ps1 echo $page = @'
+> fix.ps1 echo $css = @'
+>>fix.ps1 echo @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900^&family=Poppins:wght@300;400;500;600^&display=swap');
+>>fix.ps1 echo @tailwind base; @tailwind components; @tailwind utilities;
+>>fix.ps1 echo body { font-family: 'Poppins', sans-serif; background: #0a0a0a; color: #fff; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+>>fix.ps1 echo h1,h2,h3,.font-cinzel { font-family: 'Cinzel', serif; }
+>>fix.ps1 echo .btn-3d { background: linear-gradient(180deg, #e6c247 0%%, #c9981b 100%%); color: #111; padding: 18px 45px; border-radius: 8px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 6px 0 #8a6a14, 0 12px 20px rgba(0,0,0,0.5); transition: all 0.15s ease; display: inline-block; cursor: pointer; border: none; }
+>>fix.ps1 echo .btn-3d:hover { transform: translateY(2px); box-shadow: 0 4px 0 #8a6a14, 0 8px 15px rgba(0,0,0,0.6); }
+>>fix.ps1 echo .btn-3d:active { transform: translateY(6px); box-shadow: 0 0 0 #8a6a14, 0 2px 5px rgba(0,0,0,0.5); }
+>>fix.ps1 echo .gradient-text { background: linear-gradient(-45deg, #d4af37, #fff, #d4af37, #aa8c2c); background-size: 400%% 400%%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: gradient 5s ease infinite; }
+>>fix.ps1 echo @keyframes gradient { 0%% { background-position: 0%% 50%%; } 50%% { background-position: 100%% 50%%; } 100%% { background-position: 0%% 50%%; } }
+>>fix.ps1 echo .input-field { background: #141414; border: 1px solid #333; padding: 14px; border-radius: 6px; color: #fff; width: 100%%; outline: none; transition: border 0.3s; font-family: 'Poppins', sans-serif; }
+>>fix.ps1 echo .input-field:focus { border-color: #d4af37; }
+>>fix.ps1 echo ::-webkit-scrollbar { width: 8px; height: 8px; }
+>>fix.ps1 echo ::-webkit-scrollbar-track { background: #141414; }
+>>fix.ps1 echo ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
+>>fix.ps1 echo .hero-bg { background-image: url('/mainBackground.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; }
+>>fix.ps1 echo @media (max-width: 768px) { .hero-bg { background-image: url('/mainBackgroundMobile.jpg'); } }
+>>fix.ps1 echo '@
+>>fix.ps1 echo Set-Content -Path "app\globals.css" -Value $css -Encoding UTF8
+
+>>fix.ps1 echo $page = @'
 >>fix.ps1 echo 'use client';
 >>fix.ps1 echo import { useState, useEffect, useRef } from 'react';
 >>fix.ps1 echo import { motion, AnimatePresence } from 'framer-motion';
 >>fix.ps1 echo import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath, Volume2, VolumeX } from 'lucide-react';
 >>fix.ps1 echo import Link from 'next/link';
->>fix.ps1 echo const heroBg = "/mainBackground.jpg";
 >>fix.ps1 echo const images = [
 >>fix.ps1 echo   "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWlAI_-iU9Q6CYk8Ski9alSLDtygo1-V6oi6op-O8NT1TJYxZumlHJuv-KHDXkDYXoSa5EciFb4p2QhUUfvwyrZcCWC28ZADF4ayc8uyk1tKHFpz29ocXLrmE3Ars_LwQPI_TdebzyEo16YF=s406-k-no",
 >>fix.ps1 echo   "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkKymMBSq69j0ki_9bxY5EQFukrBGiFFwIDfsLnbDw0eone6najxKhgZKWQwGxB0ARHukGEVRO8b7FRwVWzr5q1MqSi8E2tpyR15m0IeZUzOpQtJEvBxs2corrCABE-LUxryHxheT0A9dPK=w203-h360-k-no",
@@ -26,7 +45,7 @@ echo Generating fix script (using SVG icons instead of emojis)...
 >>fix.ps1 echo   { icon: Sparkles, title: 'Haircut and Beard Combo', desc: 'The full package. Get your hair and beard done together for a complete transformation.' }
 >>fix.ps1 echo ];
 >>fix.ps1 echo const features = [
->>fix.ps1 echo   { icon: Accessibility, title: 'Accessibility', desc: 'Wheelchair accessible entrance ^& parking.' },
+>>fix.ps1 echo   { icon: Accessibility, title: 'Accessibility', desc: 'Wheelchair accessible entrance and parking.' },
 >>fix.ps1 echo   { icon: UserCheck, title: 'Service Options', desc: 'On-site services available.' },
 >>fix.ps1 echo   { icon: Bath, title: 'Amenities', desc: 'Restroom available for customers.' },
 >>fix.ps1 echo   { icon: Clock, title: 'Planning', desc: 'Walk-ins welcome!' },
@@ -126,28 +145,27 @@ echo Generating fix script (using SVG icons instead of emojis)...
 >>fix.ps1 echo         )}
 >>fix.ps1 echo       ^</AnimatePresence^>
 >>fix.ps1 echo       ^<header className="min-h-screen flex flex-col justify-center items-center text-center relative"^>
->>fix.ps1 echo         ^<div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black z-10"^>^</div^>
->>fix.ps1 echo         ^<div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }}^>^</div^>
->>fix.ps1 echo         ^<div className="z-20 px-6"^>
->>fix.ps1 echo           ^<motion.h1 initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1}} className="text-5xl md:text-8xl font-bold mb-4 gradient-text"^>FADED BARBERSHOP^</motion.h1^>
->>fix.ps1 echo           ^<motion.p initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:0.5}} className="text-lg md:text-2xl text-gray-300 uppercase tracking-widest mb-8"^>Where Quality Meets Service^</motion.p^>
->>fix.ps1 echo           ^<motion.div initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:1}} className="flex flex-col gap-4 items-center text-gray-200 mb-10"^>
->>fix.ps1 echo             ^<p className="flex items-center gap-3"^>^<MapPin className="text-gold" /^> 6610 127 Ave NW, Edmonton, AB^</p^>
->>fix.ps1 echo             ^<p className="flex items-center gap-3"^>^<Phone className="text-gold" /^> +1 780-665-6465^</p^>
+>>fix.ps1 echo         ^<div className="absolute inset-0 bg-black/30 z-10"^>^</div^>
+>>fix.ps1 echo         ^<div className="absolute inset-0 hero-bg z-0"^>^</div^>
+>>fix.ps1 echo         ^<div className="z-20 px-6 flex flex-col items-center justify-end min-h-screen pb-24 pt-32"^>
+>>fix.ps1 echo           ^<motion.p initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:0.5}} className="text-2xl md:text-4xl text-white uppercase tracking-widest mb-8 drop-shadow-[0_2px_10px_rgba(0,0,0,1)] font-bold"^>Where Quality Meets Service^</motion.p^>
+>>fix.ps1 echo           ^<motion.div initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:1}} className="flex flex-col gap-4 items-center text-white mb-10"^>
+>>fix.ps1 echo             ^<p className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-6 py-3 rounded-full border border-gold/30 font-semibold drop-shadow-lg"^>^<MapPin className="text-gold" /^> 6610 127 Ave NW, Edmonton, AB^</p^>
+>>fix.ps1 echo             ^<p className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-6 py-3 rounded-full border border-gold/30 font-semibold drop-shadow-lg"^>^<Phone className="text-gold" /^> +1 780-665-6465^</p^>
 >>fix.ps1 echo           ^</motion.div^>
 >>fix.ps1 echo           ^<motion.div initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:1.5}}^>
 >>fix.ps1 echo             ^<Link href="/book" className="btn-3d"^>Book Appointment^</Link^>
 >>fix.ps1 echo           ^</motion.div^>
 >>fix.ps1 echo         ^</div^>
 >>fix.ps1 echo       ^</header^>
->>fix.ps1 echo       ^<section id="services" className="py-24 bg-dark2 px-6 text-center"^>
->>fix.ps1 echo         ^<h2 className="text-4xl md:text-5xl font-bold mb-12 text-white font-cinzel"^>Our Services^</h2^>
->>fix.ps1 echo         ^<div className="flex flex-wrap justify-center gap-8 max-w-5xl mx-auto"^>
+>>fix.ps1 echo       ^<section id="services" className="py-24 bg-dark2 px-6"^>
+>>fix.ps1 echo         ^<h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-white font-cinzel"^>Our Services^</h2^>
+>>fix.ps1 echo         ^<div className="flex gap-8 overflow-x-auto pb-6 max-w-7xl mx-auto scroll-smooth snap-x snap-mandatory"^>
 >>fix.ps1 echo           {services.map((s, i) =^> (
->>fix.ps1 echo             ^<motion.div key={i} initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.5, delay:i*0.2}} className="bg-dark p-10 rounded-xl border border-white/5 hover:border-gold/50 transition-all hover:-translate-y-2 max-w-sm"^>
+>>fix.ps1 echo             ^<motion.div key={i} initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.5, delay:i*0.2}} className="min-w-[300px] max-w-[300px] bg-dark p-10 rounded-xl border border-white/5 hover:border-gold/50 transition-all hover:-translate-y-2 snap-center"^>
 >>fix.ps1 echo               ^<s.icon className="text-gold text-5xl mb-4 mx-auto" /^>
->>fix.ps1 echo               ^<h3 className="text-2xl font-bold mb-3 font-cinzel"^>{s.title}^</h3^>
->>fix.ps1 echo               ^<p className="text-gray-400"^>{s.desc}^</p^>
+>>fix.ps1 echo               ^<h3 className="text-2xl font-bold mb-3 font-cinzel text-center"^>{s.title}^</h3^>
+>>fix.ps1 echo               ^<p className="text-gray-400 text-center"^>{s.desc}^</p^>
 >>fix.ps1 echo             ^</motion.div^>
 >>fix.ps1 echo           ))}
 >>fix.ps1 echo         ^</div^>
@@ -165,7 +183,6 @@ echo Generating fix script (using SVG icons instead of emojis)...
 >>fix.ps1 echo             ^</motion.div^>
 >>fix.ps1 echo           ))}
 >>fix.ps1 echo         ^</div^>
->>fix.ps1 echo       ^</section^>
 >>fix.ps1 echo       ^<section id="gallery" className="py-24 bg-dark2 px-6"^>
 >>fix.ps1 echo         ^<h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-cinzel"^>Our Shop^</h2^>
 >>fix.ps1 echo         ^<div className="flex gap-4 overflow-x-auto pb-4 max-w-7xl mx-auto scroll-smooth snap-x"^>
@@ -175,7 +192,7 @@ echo Generating fix script (using SVG icons instead of emojis)...
 >>fix.ps1 echo             ^</motion.div^>
 >>fix.ps1 echo           ))}
 >>fix.ps1 echo         ^</div^>
->>fix.ps1 echo       ^</section^>
+>>fix.ps1 echo       ^/section^>
 >>fix.ps1 echo       ^<section id="reviews" className="py-24 px-6"^>
 >>fix.ps1 echo         ^<div className="max-w-7xl mx-auto"^>
 >>fix.ps1 echo           ^<div className="flex flex-col items-center gap-4 mb-12"^>
@@ -271,15 +288,16 @@ powershell -ExecutionPolicy Bypass -File fix.ps1
 del fix.ps1
 
 echo ==========================================
-echo SUCCESS! 
-echo - Replaced weird emojis with crisp SVG Scissors icons.
-echo - Loading timer set to 4 seconds.
-echo - Audio changed to .wav format.
-echo - Hero background mapped to /mainBackground.jpg.
+echo SUCCESS! Premium layout applied.
+echo - Removed the headline to show your background text.
+echo - Added mobile/desktop CSS media queries for backgrounds.
+echo - Text wrapped in high-visibility frosted glass pills.
+echo - Services section is now scrollable.
 echo ==========================================
 echo.
 echo REMINDER: Ensure your 'public' folder has:
 echo 1. mainBackground.jpg
-echo 2. audiobarber.wav
+echo 2. mainBackgroundMobile.jpg
+echo 3. audiobarber.wav
 echo ==========================================
 pause
