@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath } from 'lucide-react';
 import Link from 'next/link';
+const heroBg = "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80^&w=2070^&auto=format^&fit=crop";
 const images = [
-  "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWlAI_-iU9Q6CYk8Ski9alSLDtygo1-V6oi6op-O8NT1TJYxZumlHJuv-KHDXkDYXoSa5EciFb4p2QhUUfvwyrZcCWC28ZADF4ayc8uyk1tKHFpz29ocXLrmE3Ars_LwQPI_TdebzyEo16YF=w203-h270-k-no",
   "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWlAI_-iU9Q6CYk8Ski9alSLDtygo1-V6oi6op-O8NT1TJYxZumlHJuv-KHDXkDYXoSa5EciFb4p2QhUUfvwyrZcCWC28ZADF4ayc8uyk1tKHFpz29ocXLrmE3Ars_LwQPI_TdebzyEo16YF=s406-k-no",
   "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkKymMBSq69j0ki_9bxY5EQFukrBGiFFwIDfsLnbDw0eone6najxKhgZKWQwGxB0ARHukGEVRO8b7FRwVWzr5q1MqSi8E2tpyR15m0IeZUzOpQtJEvBxs2corrCABE-LUxryHxheT0A9dPK=w203-h360-k-no",
   "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWn04e_v9zxRcc-FE5u5o4evJcfVhP-6Csb70BY2Z0UAQVIfD4EukFILjdjljb3yqN3Hqp5f7RLtMffo3jUe3hfZ6MBZFixc0HOzsZmwAb62t1CZXq0cXy8X5cJCHMywpm698oj_WC95AIop=w203-h152-k-no",
@@ -58,11 +58,11 @@ export default function Home() {
   return (
     <div>
       <header className="min-h-screen flex flex-col justify-center items-center text-center relative">
-        <div className="absolute inset-0 bg-black/70 z-10"></div>
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${images[0]})` }}></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black z-10"></div>
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }}></div>
         <div className="z-20 px-6">
-          <motion.h1 initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1}} className="text-6xl md:text-8xl font-bold mb-4 gradient-text">FADED BARBERSHOP</motion.h1>
-          <motion.p initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:0.5}} className="text-xl md:text-2xl text-gray-300 uppercase tracking-widest mb-8">Where Quality Meets Service</motion.p>
+          <motion.h1 initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1}} className="text-5xl md:text-8xl font-bold mb-4 gradient-text">FADED BARBERSHOP</motion.h1>
+          <motion.p initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:0.5}} className="text-lg md:text-2xl text-gray-300 uppercase tracking-widest mb-8">Where Quality Meets Service</motion.p>
           <motion.div initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:1}} className="flex flex-col gap-4 items-center text-gray-200 mb-10">
             <p className="flex items-center gap-3"><MapPin className="text-gold" /> 6610 127 Ave NW, Edmonton, AB</p>
             <p className="flex items-center gap-3"><Phone className="text-gold" /> +1 780-665-6465</p>
@@ -130,8 +130,8 @@ export default function Home() {
       </section>
       <section id="contact" className="py-24 px-6">
         <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-cinzel">Visit Us</h2>
-        <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto items-start">
-          <div className="bg-dark2 p-8 rounded-xl border border-gold/20">
+        <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto items-stretch">
+          <div className="bg-dark2 p-8 rounded-xl border border-gold/20 flex flex-col justify-center">
             <h3 className="text-2xl font-bold text-gold mb-6 font-cinzel flex items-center gap-2"><Clock /> Opening Hours</h3>
             <ul className="space-y-3">
               {hours.map((h, i) => (
@@ -143,8 +143,8 @@ export default function Home() {
             </ul>
             <a href="tel:+17806656465" className="mt-6 inline-flex items-center gap-2 text-gold text-lg hover:text-white transition"><Phone /> +1 780-665-6465</a>
           </div>
-          <div className="rounded-xl overflow-hidden border border-gold/20 h-full min-h-[400px]">
-            <iframe src="https://maps.google.com/maps?q=6610%20127%20Ave%20NW%2C%20Edmonton%2C%20AB^&z=15^&output=embed" width="100%" height="100%" style={{border:0, minHeight: '400px'}} allowFullScreen="" loading="lazy"></iframe>
+          <div className="rounded-xl overflow-hidden border border-gold/20 h-[450px] bg-dark2">
+            <iframe src="https://maps.google.com/maps?q=6610+127+Ave+NW,+Edmonton,+AB^&z=15^&output=embed" width="100%" height="100%" style={{border:0}} allowFullScreen="" loading="lazy"></iframe>
           </div>
         </div>
         <div className="text-center mt-12">
@@ -154,4 +154,3 @@ export default function Home() {
     </div>
   );
 }
-
