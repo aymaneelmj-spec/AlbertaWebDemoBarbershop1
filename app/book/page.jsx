@@ -1,17 +1,16 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { CheckCircle } from 'lucide-react';
 export default function BookingPage() {
   const [form, setForm] = useState({ name: '', phone: '', service: 'Haircut', date: '', time: '' });
   const [status, setStatus] = useState('');
   const handleChange = (e) => setForm({...form, [e.target.name]: e.target.value});
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setStatus('Booking in progress...');
-    const res = await fetch('/api/book', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(form) });
-    const data = await res.json();
-    if (data.success) { setStatus('Booking confirmed! We will call you shortly.'); setForm({ name: '', phone: '', service: 'Haircut', date: '', time: '' }); } 
-    else { setStatus('Error booking. Please call us.'); }
+    const message = `New Booking Request"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"A"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"AName: ${form.name}"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"APhone: ${form.phone}"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"AService: ${form.service}"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"ADate: ${form.date}"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"ATime: ${form.time}`;
+    const smsUrl = `sms:+17806656465?
+    window.location.href = smsUrl;
+    setStatus('Your text message app should have opened. Please hit send to notify the barbershop!');
   };
   return (
     <div className="min-h-screen pt-32 pb-20 px-6 flex justify-center">
