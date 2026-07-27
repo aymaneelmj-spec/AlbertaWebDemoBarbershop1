@@ -24,13 +24,13 @@ const features = [
   { icon: Baby, title: 'Children', desc: 'Good for kids.' }
 ];
 const hours = [
-  { day: 'Sunday', time: '10 AMâ€“5 PM' },
-  { day: 'Monday', time: '9:30 AMâ€“7 PM' },
-  { day: 'Tuesday', time: '9:30 AMâ€“7 PM' },
-  { day: 'Wednesday', time: '9:30 AMâ€“7 PM' },
-  { day: 'Thursday', time: '9:30 AMâ€“7 PM' },
-  { day: 'Friday', time: '9:30 AMâ€“7 PM' },
-  { day: 'Saturday', time: '9:30 AMâ€“7 PM' }
+  { day: 'Sunday', time: '10:00 AM - 5:00 PM' },
+  { day: 'Monday', time: '9:30 AM - 7:00 PM' },
+  { day: 'Tuesday', time: '9:30 AM - 7:00 PM' },
+  { day: 'Wednesday', time: '9:30 AM - 7:00 PM' },
+  { day: 'Thursday', time: '9:30 AM - 7:00 PM' },
+  { day: 'Friday', time: '9:30 AM - 7:00 PM' },
+  { day: 'Saturday', time: '9:30 AM - 7:00 PM' }
 ];
 const reviews = [
   { name: "James R.", text: "Best fade in Edmonton! Always clean lines and great atmosphere.", rating: 5 },
@@ -143,14 +143,40 @@ export default function Home() {
             </ul>
             <a href="tel:+17806656465" className="mt-6 inline-flex items-center gap-2 text-gold text-lg hover:text-white transition"><Phone /> +1 780-665-6465</a>
           </div>
-          <div className="rounded-xl overflow-hidden border border-gold/20 h-[450px] bg-dark2">
-            <iframe src="https://maps.google.com/maps?q=6610+127+Ave+NW,+Edmonton,+AB^&z=15^&output=embed" width="100%" height="100%" style={{border:0}} allowFullScreen="" loading="lazy"></iframe>
+          <div className="rounded-xl overflow-hidden border border-gold/20 h-[450px] bg-dark2 relative">
+            <iframe src="https://maps.google.com/maps?q=6610+127+Ave+NW,+Edmonton,+AB^&z=15^&output=embed" width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy"></iframe>
           </div>
         </div>
         <div className="text-center mt-12">
           <a href="https://www.google.com/maps/place/Faded+Barbershop/@54.832399,-112.5333398,7z/data=!4m6!3m5!1s0x53a023cf8bd7bd03:0xb41bd5e899d57e96!8m2!3d53.5853054!4d-113.4435655!16s%2Fg%2F11fll5qhc8?entry=ttu^&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" className="btn-3d">Get Directions</a>
         </div>
       </section>
+      <footer className="bg-dark2 border-t border-gold/10 py-12 px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+          <div>
+            <h3 className="text-2xl font-bold text-gold font-cinzel mb-2">FADED BARBERSHOP</h3>
+            <p className="text-gray-400 text-sm">Where Quality Meets Service. Edmonton's premier destination for top-tier cuts and grooming.</p>
+          </div>
+          <div>
+            <h4 className="text-xl font-bold text-white mb-4">Quick Links</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li><Link href="/" className="hover:text-gold transition">Home</Link></li>
+              <li><Link href="/#services" className="hover:text-gold transition">Services</Link></li>
+              <li><Link href="/book" className="hover:text-gold transition">Book Appointment</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-xl font-bold text-white mb-4">Visit Us</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li className="flex items-center justify-center md:justify-start gap-2"><MapPin className="text-gold" /> 6610 127 Ave NW, Edmonton, AB</li>
+              <li className="flex items-center justify-center md:justify-start gap-2"><Phone className="text-gold" /> +1 780-665-6465</li>
+            </ul>
+          </div>
+        </div>
+        <div className="mt-8 pt-8 border-t border-white/5 text-center text-gray-500 text-sm">
+          Â© {new Date().getFullYear()} Faded Barbershop. All Rights Reserved.
+        </div>
+      </footer>
     </div>
   );
 }
