@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath, Volume2, VolumeX } from 'lucide-react';
 import Link from 'next/link';
-const heroBg = "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80^&w=2070^&auto=format^&fit=crop";
+const heroBg = "/mainBackground.jpg";
 const images = [
   "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWlAI_-iU9Q6CYk8Ski9alSLDtygo1-V6oi6op-O8NT1TJYxZumlHJuv-KHDXkDYXoSa5EciFb4p2QhUUfvwyrZcCWC28ZADF4ayc8uyk1tKHFpz29ocXLrmE3Ars_LwQPI_TdebzyEo16YF=s406-k-no",
   "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkKymMBSq69j0ki_9bxY5EQFukrBGiFFwIDfsLnbDw0eone6najxKhgZKWQwGxB0ARHukGEVRO8b7FRwVWzr5q1MqSi8E2tpyR15m0IeZUzOpQtJEvBxs2corrCABE-LUxryHxheT0A9dPK=w203-h360-k-no",
@@ -74,13 +74,10 @@ const GoogleLogo = () => (
     <path fill="#4285F4" d="M35.29 41.41V32H67c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 34.91.36 15.93 16.32.47 35.3.47c10.5 0 17.98 4.12 23.6 9.49l-6.64 6.64c-4.03-3.78-9.49-6.72-16.97-6.72-13.86 0-24.7 11.17-24.7 25.03 0 13.86 10.84 25.03 24.7 25.03 8.99 0 14.11-3.61 17.39-6.89 2.66-2.66 4.41-6.46 5.1-11.65l-22.49.01z"/>
   </svg>
 );
-const explodeEmojis = [
-  { emoji: 'âœ‚ï¸', x: -300, y: -200 },
-  { emoji: 'ðŸ’ˆ', x: 300, y: -200 },
-  { emoji: 'âœ¨', x: -300, y: 200 },
-  { emoji: 'âœ‚ï¸', x: 300, y: 200 },
-  { emoji: 'ðŸ’ˆ', x: 0, y: -400 },
-  { emoji: 'âœ¨', x: 0, y: 400 }
+const explodeItems = [
+  { x: -300, y: -200 }, { x: 300, y: -200 },
+  { x: -300, y: 200 }, { x: 300, y: 200 },
+  { x: 0, y: -400 }, { x: 0, y: 400 }
 ];
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -92,7 +89,7 @@ export default function Home() {
       if (audioRef.current) {
         audioRef.current.play().catch(e => console.log("Autoplay blocked"));
       }
-    }, 2000);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
   useEffect(() => {
@@ -102,15 +99,17 @@ export default function Home() {
   }, [isMuted]);
   return (
     <div>
-      <audio ref={audioRef} src="/audiobarber.mp3" loop />
+      <audio ref={audioRef} src="/audiobarber.wav" loop />
       <button onClick={() => setIsMuted(!isMuted)} className="fixed bottom-5 right-5 z-[60] bg-dark2 p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors">
         {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
       </button>
       <AnimatePresence>
         {isLoading && (
           <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden">
-            {explodeEmojis.map((e, i) => (
-              <motion.span key={i} style={{ position: 'absolute', fontSize: '3rem' }} initial={{ x: 0, y: 0, opacity: 0, scale: 0 }} animate={{ x: e.x, y: e.y, opacity: [0, 1, 0], scale: [0, 1.5, 0], rotate: 360 }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}>{e.emoji}</motion.span>
+            {explodeItems.map((e, i) => (
+              <motion.div key={i} style={{ position: 'absolute' }} initial={{ x: 0, y: 0, opacity: 0, scale: 0 }} animate={{ x: e.x, y: e.y, opacity: [0, 1, 0], scale: [0, 1.5, 0], rotate: 360 }} transition={{ duration: 4, repeat: Infinity, delay: i * 0.1 }}>
+                <Scissors className="text-gold w-12 h-12" />
+              </motion.div>
             ))}
             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }} className="z-10 text-center">
               <h1 className="text-5xl font-bold text-gold font-cinzel">FADED</h1>
@@ -258,4 +257,3 @@ export default function Home() {
     </div>
   );
 }
-
