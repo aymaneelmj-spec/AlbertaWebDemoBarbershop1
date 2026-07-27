@@ -1,14 +1,14 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
 import { CheckCircle } from 'lucide-react';
 export default function BookingPage() {
-  const [form, setForm] = useState({ name: '', phone: '', service: 'Haircut', date: '', time: '' });
+  const [form, setForm] = useState({ name: '', phone: '', service: 'Classic Haircut', date: '', time: '' });
   const [status, setStatus] = useState('');
   const handleChange = (e) => setForm({...form, [e.target.name]: e.target.value});
   const handleSubmit = (e) => {
     e.preventDefault();
-    const message = `New Booking Request"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"A"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"AName: ${form.name}"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"APhone: ${form.phone}"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"AService: ${form.service}"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"ADate: ${form.date}"D:\Downloads\Bussiness Freelance\canada\barbershops\Alberta\albetraWebDemo\faded-barbershop\update.bat"ATime: ${form.time}`;
-    const smsUrl = `sms:+17806656465?
+    const msg = encodeURIComponent(`New Booking Request\n\nName: ${form.name}\nPhone: ${form.phone}\nService: ${form.service}\nDate: ${form.date}\nTime: ${form.time}`);
+    const smsUrl = `sms:+17806656465?body=${msg}`;
     window.location.href = smsUrl;
     setStatus('Your text message app should have opened. Please hit send to notify the barbershop!');
   };
@@ -21,7 +21,12 @@ export default function BookingPage() {
           <input type="text" name="name" placeholder="Full Name" required value={form.name} onChange={handleChange} className="input-field" />
           <input type="tel" name="phone" placeholder="Phone Number" required value={form.phone} onChange={handleChange} className="input-field" />
           <select name="service" value={form.service} onChange={handleChange} className="input-field">
-            <option>Haircut</option><option>Skin Fade</option><option>Beard Trim</option><option>Haircut & Beard</option>
+            <option>Classic Haircut</option>
+            <option>Skin Fade</option>
+            <option>Beard Trim</option>
+            <option>Kids Cut</option>
+            <option>Hot Towel Shave</option>
+            <option>Haircut & Beard Combo</option>
           </select>
           <input type="date" name="date" required value={form.date} onChange={handleChange} className="input-field" />
           <input type="time" name="time" required value={form.time} onChange={handleChange} className="input-field" />
