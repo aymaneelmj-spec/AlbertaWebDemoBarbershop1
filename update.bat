@@ -1,8 +1,8 @@
 @echo off
 chcp 65001 >nul
-title Fixing Backgrounds, Readability, and Scrollable Services
+title Final Polish: Carousels, Mobile Menu, Backgrounds
 
-echo Generating premium update script...
+echo Generating fix script...
 
 > fix.ps1 echo $css = @'
 >>fix.ps1 echo @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900^&family=Poppins:wght@300;400;500;600^&display=swap');
@@ -12,23 +12,66 @@ echo Generating premium update script...
 >>fix.ps1 echo .btn-3d { background: linear-gradient(180deg, #e6c247 0%%, #c9981b 100%%); color: #111; padding: 18px 45px; border-radius: 8px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 6px 0 #8a6a14, 0 12px 20px rgba(0,0,0,0.5); transition: all 0.15s ease; display: inline-block; cursor: pointer; border: none; }
 >>fix.ps1 echo .btn-3d:hover { transform: translateY(2px); box-shadow: 0 4px 0 #8a6a14, 0 8px 15px rgba(0,0,0,0.6); }
 >>fix.ps1 echo .btn-3d:active { transform: translateY(6px); box-shadow: 0 0 0 #8a6a14, 0 2px 5px rgba(0,0,0,0.5); }
->>fix.ps1 echo .gradient-text { background: linear-gradient(-45deg, #d4af37, #fff, #d4af37, #aa8c2c); background-size: 400%% 400%%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: gradient 5s ease infinite; }
->>fix.ps1 echo @keyframes gradient { 0%% { background-position: 0%% 50%%; } 50%% { background-position: 100%% 50%%; } 100%% { background-position: 0%% 50%%; } }
 >>fix.ps1 echo .input-field { background: #141414; border: 1px solid #333; padding: 14px; border-radius: 6px; color: #fff; width: 100%%; outline: none; transition: border 0.3s; font-family: 'Poppins', sans-serif; }
 >>fix.ps1 echo .input-field:focus { border-color: #d4af37; }
->>fix.ps1 echo ::-webkit-scrollbar { width: 8px; height: 8px; }
->>fix.ps1 echo ::-webkit-scrollbar-track { background: #141414; }
->>fix.ps1 echo ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
->>fix.ps1 echo .hero-bg { background-image: url('/mainBackground.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; }
->>fix.ps1 echo @media (max-width: 768px) { .hero-bg { background-image: url('/mainBackgroundMobile.jpg'); } }
+>>fix.ps1 echo .hero-bg { background-image: url('/mainBackground.jpg'); background-size: cover; background-position: center; }
+>>fix.ps1 echo @media (max-width: 768px) { .hero-bg { background-image: url('/mainBackgroundMobile.jpg') !important; } }
+>>fix.ps1 echo .no-scrollbar::-webkit-scrollbar { display: none; }
+>>fix.ps1 echo .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 >>fix.ps1 echo '@
 >>fix.ps1 echo Set-Content -Path "app\globals.css" -Value $css -Encoding UTF8
+
+>>fix.ps1 echo $navbar = @'
+>>fix.ps1 echo 'use client';
+>>fix.ps1 echo import { useState, useEffect } from 'react';
+>>fix.ps1 echo import Link from 'next/link';
+>>fix.ps1 echo export default function Navbar() {
+>>fix.ps1 echo   const [open, setOpen] = useState(false);
+>>fix.ps1 echo   const [show, setShow] = useState(true);
+>>fix.ps1 echo   const [lastScrollY, setLastScrollY] = useState(0);
+>>fix.ps1 echo   useEffect(() =^> {
+>>fix.ps1 echo     const controlNavbar = () =^> {
+>>fix.ps1 echo       if (typeof window !== 'undefined') {
+>>fix.ps1 echo         if (window.scrollY ^> lastScrollY ^&^& window.scrollY ^> 100) {
+>>fix.ps1 echo           setShow(false);
+>>fix.ps1 echo         } else {
+>>fix.ps1 echo           setShow(true);
+>>fix.ps1 echo         }
+>>fix.ps1 echo         setLastScrollY(window.scrollY);
+>>fix.ps1 echo       }
+>>fix.ps1 echo     };
+>>fix.ps1 echo     window.addEventListener('scroll', controlNavbar);
+>>fix.ps1 echo     return () =^> window.removeEventListener('scroll', controlNavbar);
+>>fix.ps1 echo   }, [lastScrollY]);
+>>fix.ps1 echo   return (
+>>fix.ps1 echo     ^<nav className={`fixed w-full bg-black/80 backdrop-blur-md z-50 border-b border-gold/20 transition-transform duration-300 ${show ? 'translate-y-0' : '-translate-y-full'}`}^>
+>>fix.ps1 echo       ^<div className="max-w-7xl mx-auto flex justify-between items-center p-5"^>
+>>fix.ps1 echo         ^<Link href="/" className="text-2xl font-bold text-gold font-cinzel"^>FADED^<span className="text-white ml-2"^>BARBERSHOP^</span^>^</Link^>
+>>fix.ps1 echo         ^<div className="hidden md:flex gap-8 items-center"^>
+>>fix.ps1 echo           ^<Link href="/" className="hover:text-gold transition"^>Home^</Link^>
+>>fix.ps1 echo           ^<Link href="/#services" className="hover:text-gold transition"^>Services^</Link^>
+>>fix.ps1 echo           ^<Link href="/book" className="btn-3d !py-2 !px-6 !text-sm"^>Book Now^</Link^>
+>>fix.ps1 echo         ^</div^>
+>>fix.ps1 echo         ^<button className="md:hidden text-gold text-2xl" onClick={() =^> setOpen(!open)}^>☰^</button^>
+>>fix.ps1 echo       ^</div^>
+>>fix.ps1 echo       {open ^&^& (
+>>fix.ps1 echo         ^<div className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-md flex flex-col items-center gap-6 py-8 border-b border-gold/20"^>
+>>fix.ps1 echo           ^<Link href="/" onClick={()=^>setOpen(false)} className="text-white text-lg hover:text-gold transition"^>Home^</Link^>
+>>fix.ps1 echo           ^<Link href="/#services" onClick={()=^>setOpen(false)} className="text-white text-lg hover:text-gold transition"^>Services^</Link^>
+>>fix.ps1 echo           ^<Link href="/book" onClick={()=^>setOpen(false)} className="btn-3d !py-2 !px-6 !text-sm"^>Book Now^</Link^>
+>>fix.ps1 echo         ^</div^>
+>>fix.ps1 echo       )}
+>>fix.ps1 echo     ^</nav^>
+>>fix.ps1 echo   );
+>>fix.ps1 echo }
+>>fix.ps1 echo '@
+>>fix.ps1 echo Set-Content -Path "components\Navbar.jsx" -Value $navbar -Encoding UTF8
 
 >>fix.ps1 echo $page = @'
 >>fix.ps1 echo 'use client';
 >>fix.ps1 echo import { useState, useEffect, useRef } from 'react';
 >>fix.ps1 echo import { motion, AnimatePresence } from 'framer-motion';
->>fix.ps1 echo import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath, Volume2, VolumeX } from 'lucide-react';
+>>fix.ps1 echo import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath, Volume2, VolumeX, ChevronLeft, ChevronRight } from 'lucide-react';
 >>fix.ps1 echo import Link from 'next/link';
 >>fix.ps1 echo const images = [
 >>fix.ps1 echo   "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWlAI_-iU9Q6CYk8Ski9alSLDtygo1-V6oi6op-O8NT1TJYxZumlHJuv-KHDXkDYXoSa5EciFb4p2QhUUfvwyrZcCWC28ZADF4ayc8uyk1tKHFpz29ocXLrmE3Ars_LwQPI_TdebzyEo16YF=s406-k-no",
@@ -45,7 +88,7 @@ echo Generating premium update script...
 >>fix.ps1 echo   { icon: Sparkles, title: 'Haircut and Beard Combo', desc: 'The full package. Get your hair and beard done together for a complete transformation.' }
 >>fix.ps1 echo ];
 >>fix.ps1 echo const features = [
->>fix.ps1 echo   { icon: Accessibility, title: 'Accessibility', desc: 'Wheelchair accessible entrance and parking.' },
+>>fix.ps1 echo   { icon: Accessibility, title: 'Accessibility', desc: 'Wheelchair accessible entrance ^& parking.' },
 >>fix.ps1 echo   { icon: UserCheck, title: 'Service Options', desc: 'On-site services available.' },
 >>fix.ps1 echo   { icon: Bath, title: 'Amenities', desc: 'Restroom available for customers.' },
 >>fix.ps1 echo   { icon: Clock, title: 'Planning', desc: 'Walk-ins welcome!' },
@@ -109,6 +152,14 @@ echo Generating premium update script...
 >>fix.ps1 echo   const [isLoading, setIsLoading] = useState(true);
 >>fix.ps1 echo   const [isMuted, setIsMuted] = useState(false);
 >>fix.ps1 echo   const audioRef = useRef(null);
+>>fix.ps1 echo   const servicesRef = useRef(null);
+>>fix.ps1 echo   const imagesRef = useRef(null);
+>>fix.ps1 echo   const reviewsRef = useRef(null);
+>>fix.ps1 echo   const scroll = (ref, direction) =^> {
+>>fix.ps1 echo     if (ref.current) {
+>>fix.ps1 echo       ref.current.scrollBy({ left: direction * 350, behavior: 'smooth' });
+>>fix.ps1 echo     }
+>>fix.ps1 echo   };
 >>fix.ps1 echo   useEffect(() =^> {
 >>fix.ps1 echo     const timer = setTimeout(() =^> {
 >>fix.ps1 echo       setIsLoading(false);
@@ -137,10 +188,6 @@ echo Generating premium update script...
 >>fix.ps1 echo                 ^<Scissors className="text-gold w-12 h-12" /^>
 >>fix.ps1 echo               ^</motion.div^>
 >>fix.ps1 echo             ))}
->>fix.ps1 echo             ^<motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }} className="z-10 text-center"^>
->>fix.ps1 echo               ^<h1 className="text-5xl font-bold text-gold font-cinzel"^>FADED^</h1^>
->>fix.ps1 echo               ^<p className="text-white text-2xl tracking-widest font-cinzel"^>BARBERSHOP^</p^>
->>fix.ps1 echo             ^</motion.div^>
 >>fix.ps1 echo           ^</motion.div^>
 >>fix.ps1 echo         )}
 >>fix.ps1 echo       ^</AnimatePresence^>
@@ -160,14 +207,22 @@ echo Generating premium update script...
 >>fix.ps1 echo       ^</header^>
 >>fix.ps1 echo       ^<section id="services" className="py-24 bg-dark2 px-6"^>
 >>fix.ps1 echo         ^<h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-white font-cinzel"^>Our Services^</h2^>
->>fix.ps1 echo         ^<div className="flex gap-8 overflow-x-auto pb-6 max-w-7xl mx-auto scroll-smooth snap-x snap-mandatory"^>
->>fix.ps1 echo           {services.map((s, i) =^> (
->>fix.ps1 echo             ^<motion.div key={i} initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.5, delay:i*0.2}} className="min-w-[300px] max-w-[300px] bg-dark p-10 rounded-xl border border-white/5 hover:border-gold/50 transition-all hover:-translate-y-2 snap-center"^>
->>fix.ps1 echo               ^<s.icon className="text-gold text-5xl mb-4 mx-auto" /^>
->>fix.ps1 echo               ^<h3 className="text-2xl font-bold mb-3 font-cinzel text-center"^>{s.title}^</h3^>
->>fix.ps1 echo               ^<p className="text-gray-400 text-center"^>{s.desc}^</p^>
->>fix.ps1 echo             ^</motion.div^>
->>fix.ps1 echo           ))}
+>>fix.ps1 echo         ^<div className="relative max-w-7xl mx-auto"^>
+>>fix.ps1 echo           ^<button onClick={() =^> scroll(servicesRef, -1)} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-dark p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors"^>
+>>fix.ps1 echo             ^<ChevronLeft size={24} /^>
+>>fix.ps1 echo           ^</button^>
+>>fix.ps1 echo           ^<div ref={servicesRef} className="flex gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 px-10 no-scrollbar"^>
+>>fix.ps1 echo             {services.map((s, i) =^> (
+>>fix.ps1 echo               ^<motion.div key={i} initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.5, delay:i*0.1}} className="min-w-[300px] max-w-[300px] bg-dark p-10 rounded-xl border border-white/5 hover:border-gold/50 transition-all hover:-translate-y-2 snap-center"^>
+>>fix.ps1 echo                 ^<s.icon className="text-gold text-5xl mb-4 mx-auto" /^>
+>>fix.ps1 echo                 ^<h3 className="text-2xl font-bold mb-3 font-cinzel text-center"^>{s.title}^</h3^>
+>>fix.ps1 echo                 ^<p className="text-gray-400 text-center"^>{s.desc}^</p^>
+>>fix.ps1 echo               ^</motion.div^>
+>>fix.ps1 echo             ))}
+>>fix.ps1 echo           ^</div^>
+>>fix.ps1 echo           ^<button onClick={() =^> scroll(servicesRef, 1)} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-dark p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors"^>
+>>fix.ps1 echo             ^<ChevronRight size={24} /^>
+>>fix.ps1 echo           ^</button^>
 >>fix.ps1 echo         ^</div^>
 >>fix.ps1 echo       ^</section^>
 >>fix.ps1 echo       ^<section id="about" className="py-24 px-6"^>
@@ -183,16 +238,25 @@ echo Generating premium update script...
 >>fix.ps1 echo             ^</motion.div^>
 >>fix.ps1 echo           ))}
 >>fix.ps1 echo         ^</div^>
+>>fix.ps1 echo       ^</section^>
 >>fix.ps1 echo       ^<section id="gallery" className="py-24 bg-dark2 px-6"^>
 >>fix.ps1 echo         ^<h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-cinzel"^>Our Shop^</h2^>
->>fix.ps1 echo         ^<div className="flex gap-4 overflow-x-auto pb-4 max-w-7xl mx-auto scroll-smooth snap-x"^>
->>fix.ps1 echo           {images.map((img, i) =^> (
->>fix.ps1 echo             ^<motion.div key={i} initial={{opacity:0, scale:0.9}} whileInView={{opacity:1, scale:1}} viewport={{once:true}} transition={{duration:0.5}} className="min-w-[300px] h-[400px] rounded-2xl overflow-hidden border-2 border-gold/20 hover:border-gold/60 transition-all snap-center"^>
->>fix.ps1 echo               ^<img src={img} alt={`Faded Barbershop ${i+1}`} className="w-full h-full object-cover" /^>
->>fix.ps1 echo             ^</motion.div^>
->>fix.ps1 echo           ))}
+>>fix.ps1 echo         ^<div className="relative max-w-7xl mx-auto"^>
+>>fix.ps1 echo           ^<button onClick={() =^> scroll(imagesRef, -1)} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-dark p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors"^>
+>>fix.ps1 echo             ^<ChevronLeft size={24} /^>
+>>fix.ps1 echo           ^</button^>
+>>fix.ps1 echo           ^<div ref={imagesRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 px-10 no-scrollbar"^>
+>>fix.ps1 echo             {images.map((img, i) =^> (
+>>fix.ps1 echo               ^<motion.div key={i} initial={{opacity:0, scale:0.9}} whileInView={{opacity:1, scale:1}} viewport={{once:true}} transition={{duration:0.5}} className="min-w-[300px] h-[400px] rounded-2xl overflow-hidden border-2 border-gold/20 hover:border-gold/60 transition-all snap-center"^>
+>>fix.ps1 echo                 ^<img src={img} alt={`Faded Barbershop ${i+1}`} className="w-full h-full object-cover" /^>
+>>fix.ps1 echo               ^</motion.div^>
+>>fix.ps1 echo             ))}
+>>fix.ps1 echo           ^</div^>
+>>fix.ps1 echo           ^<button onClick={() =^> scroll(imagesRef, 1)} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-dark p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors"^>
+>>fix.ps1 echo             ^<ChevronRight size={24} /^>
+>>fix.ps1 echo           ^</button^>
 >>fix.ps1 echo         ^</div^>
->>fix.ps1 echo       ^/section^>
+>>fix.ps1 echo       ^</section^>
 >>fix.ps1 echo       ^<section id="reviews" className="py-24 px-6"^>
 >>fix.ps1 echo         ^<div className="max-w-7xl mx-auto"^>
 >>fix.ps1 echo           ^<div className="flex flex-col items-center gap-4 mb-12"^>
@@ -207,19 +271,27 @@ echo Generating premium update script...
 >>fix.ps1 echo               ^</div^>
 >>fix.ps1 echo             ^</div^>
 >>fix.ps1 echo           ^</div^>
->>fix.ps1 echo           ^<div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth"^>
->>fix.ps1 echo             {reviews.map((r, i) =^> (
->>fix.ps1 echo               ^<motion.div key={i} initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.5, delay:i*0.05}} className="min-w-[300px] max-w-[300px] bg-dark2 p-8 rounded-xl border border-white/5 flex flex-col snap-center hover:border-gold/40 transition-all"^>
->>fix.ps1 echo                 ^<div className="flex justify-between items-center mb-4"^>
->>fix.ps1 echo                   ^<h4 className="text-xl font-bold text-white font-cinzel"^>{r.name}^</h4^>
->>fix.ps1 echo                   ^<span className="text-xs text-gray-500"^>{r.date}^</span^>
->>fix.ps1 echo                 ^</div^>
->>fix.ps1 echo                 ^<div className="flex gap-1 mb-4"^>
->>fix.ps1 echo                   {[...Array(r.rating)].map((_, j) =^> ^<Star key={j} className="text-gold fill-gold w-5 h-5" /^>)}
->>fix.ps1 echo                 ^</div^>
->>fix.ps1 echo                 ^<p className="text-gray-400 italic flex-grow"^>"{r.text}"^</p^>
->>fix.ps1 echo               ^</motion.div^>
->>fix.ps1 echo             ))}
+>>fix.ps1 echo           ^<div className="relative"^>
+>>fix.ps1 echo             ^<button onClick={() =^> scroll(reviewsRef, -1)} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-dark2 p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors"^>
+>>fix.ps1 echo               ^<ChevronLeft size={24} /^>
+>>fix.ps1 echo             ^</button^>
+>>fix.ps1 echo             ^<div ref={reviewsRef} className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 px-10 no-scrollbar"^>
+>>fix.ps1 echo               {reviews.map((r, i) =^> (
+>>fix.ps1 echo                 ^<motion.div key={i} initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.5, delay:i*0.05}} className="min-w-[300px] max-w-[300px] bg-dark2 p-8 rounded-xl border border-white/5 flex flex-col snap-center hover:border-gold/40 transition-all"^>
+>>fix.ps1 echo                   ^<div className="flex justify-between items-center mb-4"^>
+>>fix.ps1 echo                     ^<h4 className="text-xl font-bold text-white font-cinzel"^>{r.name}^</h4^>
+>>fix.ps1 echo                     ^<span className="text-xs text-gray-500"^>{r.date}^</span^>
+>>fix.ps1 echo                   ^</div^>
+>>fix.ps1 echo                   ^<div className="flex gap-1 mb-4"^>
+>>fix.ps1 echo                     {[...Array(r.rating)].map((_, j) =^> ^<Star key={j} className="text-gold fill-gold w-5 h-5" /^>)}
+>>fix.ps1 echo                   ^</div^>
+>>fix.ps1 echo                   ^<p className="text-gray-400 italic flex-grow"^>"{r.text}"^</p^>
+>>fix.ps1 echo                 ^</motion.div^>
+>>fix.ps1 echo               ))}
+>>fix.ps1 echo             ^</div^>
+>>fix.ps1 echo             ^<button onClick={() =^> scroll(reviewsRef, 1)} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-dark2 p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors"^>
+>>fix.ps1 echo               ^<ChevronRight size={24} /^>
+>>fix.ps1 echo             ^</button^>
 >>fix.ps1 echo           ^</div^>
 >>fix.ps1 echo         ^</div^>
 >>fix.ps1 echo       ^</section^>
@@ -288,16 +360,10 @@ powershell -ExecutionPolicy Bypass -File fix.ps1
 del fix.ps1
 
 echo ==========================================
-echo SUCCESS! Premium layout applied.
-echo - Removed the headline to show your background text.
-echo - Added mobile/desktop CSS media queries for backgrounds.
-echo - Text wrapped in high-visibility frosted glass pills.
-echo - Services section is now scrollable.
-echo ==========================================
-echo.
-echo REMINDER: Ensure your 'public' folder has:
-echo 1. mainBackground.jpg
-echo 2. mainBackgroundMobile.jpg
-echo 3. audiobarber.wav
+echo SUCCESS! Premium polish applied.
+echo - Removed all "Faded Barbershop" headlines.
+echo - Mobile menu fully fixed and centered.
+echo - Mobile background image forced with !important.
+echo - All carousels now have Left/Right arrow buttons and hidden scrollbars.
 echo ==========================================
 pause
