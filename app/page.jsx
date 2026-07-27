@@ -40,15 +40,15 @@ const hours = [
 ];
 
 const reviews = [
-  { name: "Vernen Gay Agustin", text: "Weâ€™ve been searching for the best barber shop in the area for a while, and this place exceeded our expectations. Great service, clean space, and such a welcoming vibe. My kids walked out happy and confident. Highly recommend to any parents.", rating: 5, date: "3 months ago" },
+  { name: "Vernen Gay Agustin", text: "We’ve been searching for the best barber shop in the area for a while, and this place exceeded our expectations. Great service, clean space, and such a welcoming vibe. My kids walked out happy and confident. Highly recommend to any parents.", rating: 5, date: "3 months ago" },
   { name: "Tara Balaski", text: "My son got his hair done today, and quite a bit was taken off. He made a masterpiece of my son's hair. Absolutely love it! Incredible service, thank you so much!", rating: 5, date: "a month ago" },
   { name: "Santana D", text: "My husband came in today to get just his hair trim (Skin Fade) and he said the experience was great! The barber was super friendly, did a great job! The barber shop was really nice and clean with plenty of seating. It is WALK-IN only.", rating: 5, date: "6 months ago" },
   { name: "Zsarina Balmes", text: "My husband and I recently visited this barber shop, and we had a great experience! The place is clean, welcoming, and has a really nice vibe. The barber did an amazing job giving us the exact haircuts we wanted.", rating: 5, date: "4 months ago" },
-  { name: "SHABISKY", text: "I got a taper and a razor cut for my hair and beard, very happy with the outcome, he was very polite and easy going. Double checked the haircut I wanted and kept asking if I needed anything else. 10/10 to Amin heâ€™s honestly a hard worker!", rating: 5, date: "2 months ago" },
-  { name: "Jodi Healey", text: "Took my dad to this barbershop and we couldnâ€™t be happier with the result! The barber did a fantastic job every detail was perfectly executed and itâ€™s clear they take pride in their craft.", rating: 5, date: "8 months ago" },
+  { name: "SHABISKY", text: "I got a taper and a razor cut for my hair and beard, very happy with the outcome, he was very polite and easy going. Double checked the haircut I wanted and kept asking if I needed anything else. 10/10 to Amin he’s honestly a hard worker!", rating: 5, date: "2 months ago" },
+  { name: "Jodi Healey", text: "Took my dad to this barbershop and we couldn’t be happier with the result! The barber did a fantastic job every detail was perfectly executed and it’s clear they take pride in their craft.", rating: 5, date: "8 months ago" },
   { name: "Denise Brake", text: "We were walk in customers today, warmly welcomed by Joseph and he was up for the challenge!", rating: 5, date: "4 months ago" },
-  { name: "Michael Landry", text: "Super professional, love how fast and precise the guys are. Very friendly, and a pleasure to see them every time! Best barbershop in the area and Iâ€™ve been to a few!!!", rating: 5, date: "8 months ago" },
-  { name: "Salimah Karmali", text: "Yusuf was very professional and listen to what my son wanted. Delivered with 5 stars!! He left one happy kid with a big smile, saying â€˜Itâ€™s exactly what I wanted!!â€ Thank you!", rating: 5, date: "2 months ago" },
+  { name: "Michael Landry", text: "Super professional, love how fast and precise the guys are. Very friendly, and a pleasure to see them every time! Best barbershop in the area and I’ve been to a few!!!", rating: 5, date: "8 months ago" },
+  { name: "Salimah Karmali", text: "Yusuf was very professional and listen to what my son wanted. Delivered with 5 stars!! He left one happy kid with a big smile, saying ‘It’s exactly what I wanted!!” Thank you!", rating: 5, date: "2 months ago" },
   { name: "Becca R", text: "Excellent barber for my toddler, stylist had him giggling right away and he sat through a haircut with no problems. Cool place with a foosball table that kept the little ones entertained and he left looking dapper.", rating: 5, date: "3 months ago" }
 ];
 
@@ -60,11 +60,12 @@ const faqs = [
 
 const FAQItem = ({ q, a }) => {
   const [open, setOpen] = useState(false);
+  const chevClass = "text-gold transition-transform " + (open ? "rotate-180" : "");
   return (
     <div className="bg-dark2 p-5 rounded-lg border border-gold/10 mb-4">
       <button className="flex justify-between items-center w-full text-left" onClick={() => setOpen(!open)}>
         <h4 className="text-lg font-semibold text-gold">{q}</h4>
-        <ChevronDown className={	ext-gold transition-transform } />
+        <ChevronDown className={chevClass} />
       </button>
       {open && <p className="mt-4 text-gray-400">{a}</p>}
     </div>
@@ -197,7 +198,7 @@ export default function Home() {
           <div ref={imagesRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 px-10 no-scrollbar">
             {images.map((img, i) => (
               <motion.div key={i} initial={{opacity:0, scale:0.9}} whileInView={{opacity:1, scale:1}} viewport={{once:true}} transition={{duration:0.5}} className="min-w-[300px] h-[400px] rounded-2xl overflow-hidden border-2 border-gold/20 hover:border-gold/60 transition-all snap-center">
-                <img src={img} alt={Faded Barbershop } className="w-full h-full object-cover" />
+                <img src={img} alt={"Faded Barbershop " + (i+1)} className="w-full h-full object-cover" />
               </motion.div>
             ))}
           </div>
@@ -300,7 +301,7 @@ export default function Home() {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-white/5 text-center text-gray-500 text-sm">
-          Â© {new Date().getFullYear()} Faded Barbershop. All Rights Reserved.
+          © {new Date().getFullYear()} Faded Barbershop. All Rights Reserved.
         </div>
       </footer>
     </div>
