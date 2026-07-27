@@ -1,8 +1,8 @@
 @echo off
 chcp 65001 >nul
-title Final Premium Update: SMS Bookings, Maps, Navbar, Real Reviews
+title Fixing SMS Bug & Adding More Services
 
-echo Generating update script...
+echo Generating fix script (safely bypassing Windows Batch bugs)...
 
 > fix.ps1 echo $page = @'
 >>fix.ps1 echo 'use client';
@@ -18,9 +18,12 @@ echo Generating update script...
 >>fix.ps1 echo   "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmevhZ4AIxV_D3K-a42DFiivGQa0SEMPOsMmcJpymIFMbFo05E-NnC4HjqAgHM201xadbcGF5l43Bte-zpHCTckQBbbH32TFDYsgAGA6XmGvTOAAsIYk7qGXZcqkVj7wj_wmphS5dcGXO59=w203-h287-k-no"
 >>fix.ps1 echo ];
 >>fix.ps1 echo const services = [
->>fix.ps1 echo   { icon: Scissors, title: 'Classic Cuts', desc: 'Timeless styles tailored to your preference.' },
->>fix.ps1 echo   { icon: Sparkles, title: 'Skin Fades', desc: 'Seamless blends from skin to length.' },
->>fix.ps1 echo   { icon: Clock, title: 'Beard Grooming', desc: 'Razor-sharp lineups and beard sculpting.' }
+>>fix.ps1 echo   { icon: Scissors, title: 'Classic Haircut', desc: 'Timeless styles tailored to your preference, from scissor cuts to clippers.' },
+>>fix.ps1 echo   { icon: Sparkles, title: 'Skin Fades', desc: 'Seamless blends from skin to length for a sharp, modern look.' },
+>>fix.ps1 echo   { icon: UserCheck, title: 'Beard Sculpting', desc: 'Razor-sharp lineups and beard trims to keep your facial hair fresh.' },
+>>fix.ps1 echo   { icon: Baby, title: "Kids' Cuts", desc: 'Patient and friendly haircuts for your little ones in a comfortable environment.' },
+>>fix.ps1 echo   { icon: Bath, title: 'Hot Towel Shave', desc: 'Traditional straight razor shave with a hot towel for the ultimate clean feel.' },
+>>fix.ps1 echo   { icon: Sparkles, title: 'Haircut & Beard Combo', desc: 'The full package. Get your hair and beard done together for a complete transformation.' }
 >>fix.ps1 echo ];
 >>fix.ps1 echo const features = [
 >>fix.ps1 echo   { icon: Accessibility, title: 'Accessibility', desc: 'Wheelchair accessible entrance ^& parking.' },
@@ -223,58 +226,18 @@ echo Generating update script...
 >>fix.ps1 echo '@
 >>fix.ps1 echo Set-Content -Path "app\page.jsx" -Value $page -Encoding UTF8
 
->>fix.ps1 echo $navbar = @'
->>fix.ps1 echo 'use client';
->>fix.ps1 echo import { useState, useEffect } from 'react';
->>fix.ps1 echo import Link from 'next/link';
->>fix.ps1 echo export default function Navbar() {
->>fix.ps1 echo   const [open, setOpen] = useState(false);
->>fix.ps1 echo   const [show, setShow] = useState(true);
->>fix.ps1 echo   const [lastScrollY, setLastScrollY] = useState(0);
->>fix.ps1 echo   useEffect(() =^> {
->>fix.ps1 echo     const controlNavbar = () =^> {
->>fix.ps1 echo       if (typeof window !== 'undefined') {
->>fix.ps1 echo         if (window.scrollY ^> lastScrollY ^&^& window.scrollY ^> 100) {
->>fix.ps1 echo           setShow(false);
->>fix.ps1 echo         } else {
->>fix.ps1 echo           setShow(true);
->>fix.ps1 echo         }
->>fix.ps1 echo         setLastScrollY(window.scrollY);
->>fix.ps1 echo       }
->>fix.ps1 echo     };
->>fix.ps1 echo     window.addEventListener('scroll', controlNavbar);
->>fix.ps1 echo     return () =^> window.removeEventListener('scroll', controlNavbar);
->>fix.ps1 echo   }, [lastScrollY]);
->>fix.ps1 echo   return (
->>fix.ps1 echo     ^<nav className={`fixed w-full bg-black/80 backdrop-blur-md z-50 border-b border-gold/20 transition-transform duration-300 ${show ? 'translate-y-0' : '-translate-y-full'}`}^>
->>fix.ps1 echo       ^<div className="max-w-7xl mx-auto flex justify-between items-center p-5"^>
->>fix.ps1 echo         ^<Link href="/" className="text-2xl font-bold text-gold font-cinzel"^>FADED^<span className="text-white ml-2"^>BARBERSHOP^</span^>^</Link^>
->>fix.ps1 echo         ^<div className="hidden md:flex gap-8 items-center"^>
->>fix.ps1 echo           ^<Link href="/" className="hover:text-gold transition"^>Home^</Link^>
->>fix.ps1 echo           ^<Link href="/#services" className="hover:text-gold transition"^>Services^</Link^>
->>fix.ps1 echo           ^<Link href="/book" className="btn-3d !py-2 !px-6 !text-sm"^>Book Now^</Link^>
->>fix.ps1 echo         ^</div^>
->>fix.ps1 echo         ^<button className="md:hidden text-gold text-2xl" onClick={() =^> setOpen(!open)}^>☰^</button^>
->>fix.ps1 echo       ^</div^>
->>fix.ps1 echo       {open ^&^& (^<div className="md:hidden flex flex-col items-center gap-4 pb-5 bg-black"^>^<Link href="/" onClick={()=^>setOpen(false)}^>Home^</Link^>^<Link href="/#services" onClick={()=^>setOpen(false)}^>Services^</Link^>^<Link href="/book" onClick={()=^>setOpen(false)} className="btn-3d !py-2 !px-6 !text-sm"^>Book Now^</Link^>^</div^>)}
->>fix.ps1 echo     ^</nav^>
->>fix.ps1 echo   );
->>fix.ps1 echo }
->>fix.ps1 echo '@
->>fix.ps1 echo Set-Content -Path "components\Navbar.jsx" -Value $navbar -Encoding UTF8
-
 >>fix.ps1 echo $bookPage = @'
 >>fix.ps1 echo 'use client';
 >>fix.ps1 echo import { useState } from 'react';
 >>fix.ps1 echo import { CheckCircle } from 'lucide-react';
 >>fix.ps1 echo export default function BookingPage() {
->>fix.ps1 echo   const [form, setForm] = useState({ name: '', phone: '', service: 'Haircut', date: '', time: '' });
+>>fix.ps1 echo   const [form, setForm] = useState({ name: '', phone: '', service: 'Classic Haircut', date: '', time: '' });
 >>fix.ps1 echo   const [status, setStatus] = useState('');
 >>fix.ps1 echo   const handleChange = (e) =^> setForm({...form, [e.target.name]: e.target.value});
 >>fix.ps1 echo   const handleSubmit = (e) =^> {
 >>fix.ps1 echo     e.preventDefault();
->>fix.ps1 echo     const message = `New Booking Request%0A%0AName: ${form.name}%0APhone: ${form.phone}%0AService: ${form.service}%0ADate: ${form.date}%0ATime: ${form.time}`;
->>fix.ps1 echo     const smsUrl = `sms:+17806656465?&body=${message}`;
+>>fix.ps1 echo     const msg = encodeURIComponent(`New Booking Request\n\nName: ${form.name}\nPhone: ${form.phone}\nService: ${form.service}\nDate: ${form.date}\nTime: ${form.time}`);
+>>fix.ps1 echo     const smsUrl = `sms:+17806656465?^&body=${msg}`;
 >>fix.ps1 echo     window.location.href = smsUrl;
 >>fix.ps1 echo     setStatus('Your text message app should have opened. Please hit send to notify the barbershop!');
 >>fix.ps1 echo   };
@@ -287,7 +250,12 @@ echo Generating update script...
 >>fix.ps1 echo           ^<input type="text" name="name" placeholder="Full Name" required value={form.name} onChange={handleChange} className="input-field" /^>
 >>fix.ps1 echo           ^<input type="tel" name="phone" placeholder="Phone Number" required value={form.phone} onChange={handleChange} className="input-field" /^>
 >>fix.ps1 echo           ^<select name="service" value={form.service} onChange={handleChange} className="input-field"^>
->>fix.ps1 echo             ^<option^>Haircut^</option^>^<option^>Skin Fade^</option^>^<option^>Beard Trim^</option^>^<option^>Haircut ^& Beard^</option^>
+>>fix.ps1 echo             ^<option^>Classic Haircut^</option^>
+>>fix.ps1 echo             ^<option^>Skin Fade^</option^>
+>>fix.ps1 echo             ^<option^>Beard Trim^</option^>
+>>fix.ps1 echo             ^<option^>Kids Cut^</option^>
+>>fix.ps1 echo             ^<option^>Hot Towel Shave^</option^>
+>>fix.ps1 echo             ^<option^>Haircut ^& Beard Combo^</option^>
 >>fix.ps1 echo           ^</select^>
 >>fix.ps1 echo           ^<input type="date" name="date" required value={form.date} onChange={handleChange} className="input-field" /^>
 >>fix.ps1 echo           ^<input type="time" name="time" required value={form.time} onChange={handleChange} className="input-field" /^>
@@ -305,10 +273,8 @@ powershell -ExecutionPolicy Bypass -File fix.ps1
 del fix.ps1
 
 echo ==========================================
-echo SUCCESS! Premium features applied.
-echo - Bookings now open SMS directly to the owner's phone.
-echo - Exact Google Maps embed applied.
-echo - Navbar hides on scroll down, shows on scroll up.
-echo - Real reviews added with Google logo badge.
+echo SUCCESS! Bug fixed and more services added.
+echo - SMS booking link fixed (bypassed Batch bug).
+echo - Added 6 premium services to the Services section.
 echo ==========================================
 pause
