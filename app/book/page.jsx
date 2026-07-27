@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { CheckCircle } from 'lucide-react';
 export default function BookingPage() {
@@ -26,7 +26,7 @@ export default function BookingPage() {
             <option>Beard Trim</option>
             <option>Kids Cut</option>
             <option>Hot Towel Shave</option>
-            <option>Haircut & Beard Combo</option>
+            <option>Haircut and Beard Combo</option>
           </select>
           <input type="date" name="date" required value={form.date} onChange={handleChange} className="input-field" />
           <input type="time" name="time" required value={form.time} onChange={handleChange} className="input-field" />
@@ -37,3 +37,4 @@ export default function BookingPage() {
     </div>
   );
 }
+

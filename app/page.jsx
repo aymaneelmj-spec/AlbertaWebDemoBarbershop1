@@ -16,7 +16,7 @@ const services = [
   { icon: UserCheck, title: 'Beard Sculpting', desc: 'Razor-sharp lineups and beard trims to keep your facial hair fresh.' },
   { icon: Baby, title: "Kids' Cuts", desc: 'Patient and friendly haircuts for your little ones in a comfortable environment.' },
   { icon: Bath, title: 'Hot Towel Shave', desc: 'Traditional straight razor shave with a hot towel for the ultimate clean feel.' },
-  { icon: Sparkles, title: 'Haircut 
+  { icon: Sparkles, title: 'Haircut and Beard Combo', desc: 'The full package. Get your hair and beard done together for a complete transformation.' }
 ];
 const features = [
   { icon: Accessibility, title: 'Accessibility', desc: 'Wheelchair accessible entrance & parking.' },
@@ -258,3 +258,4 @@ export default function Home() {
     </div>
   );
 }
+
