@@ -1,4 +1,4 @@
-﻿# fix18.ps1
+﻿# fix19.ps1
 # Right-click this file and select "Run with PowerShell"
 
  $page = @"
@@ -66,13 +66,13 @@ const FAQItem = ({ q, a }) => {
   const [open, setOpen] = useState(false);
   const chevClass = "text-gold transition-transform " + (open ? "rotate-180" : "");
   return (
-    <div className="bg-dark2 p-5 rounded-lg border border-gold/10 mb-4">
+    <motion.div whileHover={{ scale: 1.02 }} className="bg-dark2 p-5 rounded-lg border border-gold/10 mb-4 hover:border-gold/40 transition-colors">
       <button className="flex justify-between items-center w-full text-left" onClick={() => setOpen(!open)}>
         <h4 className="text-lg font-semibold text-gold">{q}</h4>
         <ChevronDown className={chevClass} />
       </button>
       {open && <p className="mt-4 text-gray-400">{a}</p>}
-    </div>
+    </motion.div>
   );
 };
 
@@ -108,14 +108,12 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // Start audio after 3 seconds
     const audioTimer = setTimeout(() => {
       if (audioRef.current) {
         audioRef.current.play().catch(e => console.log("Autoplay blocked"));
       }
-    }, 3000);
+    }, 2000); // Starts at exactly 2 seconds
 
-    // Hide loading spinner after 4 seconds
     const loadingTimer = setTimeout(() => {
       setIsLoading(false);
     }, 4000);
@@ -135,9 +133,14 @@ export default function Home() {
   return (
     <div>
       <audio ref={audioRef} src="/audiobarber.wav" loop />
-      <button onClick={() => setIsMuted(!isMuted)} className="fixed bottom-5 right-5 z-[60] bg-dark2 p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors">
+      <motion.button 
+        whileHover={{ scale: 1.1 }} 
+        whileTap={{ scale: 0.9 }} 
+        onClick={() => setIsMuted(!isMuted)} 
+        className="fixed bottom-5 right-5 z-[60] bg-dark2 p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors shadow-lg"
+      >
         {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
-      </button>
+      </motion.button>
 
       <AnimatePresence>
         {isLoading && (
@@ -164,7 +167,7 @@ export default function Home() {
             <p className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-6 py-3 rounded-full border border-gold/30 font-semibold drop-shadow-lg"><MapPin className="text-gold" /> 6610 127 Ave NW, Edmonton, AB</p>
             <p className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-6 py-3 rounded-full border border-gold/30 font-semibold drop-shadow-lg"><Phone className="text-gold" /> +1 780-665-6465</p>
           </motion.div>
-          <motion.div initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:1.5}}>
+          <motion.div initial={{opacity:0, y:50}} animate={{opacity:1, y:0}} transition={{duration:1, delay:1.5}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link href="/book" className="btn-3d">Book Appointment</Link>
           </motion.div>
         </div>
@@ -176,12 +179,20 @@ export default function Home() {
           <button onClick={() => scroll(servicesRef, -1)} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-dark p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors">
             <ChevronLeft size={24} />
           </button>
-          <div ref={servicesRef} className="flex gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 px-10 no-scrollbar">
+          <div ref={servicesRef} className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory snap-always pb-6 px-10 no-scrollbar">
             {services.map((s, i) => (
-              <motion.div key={i} initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.5, delay:i*0.1}} className="min-w-[300px] max-w-[300px] bg-dark p-10 rounded-xl border border-white/5 hover:border-gold/50 transition-all hover:-translate-y-2 snap-center">
+              <motion.div 
+                key={i} 
+                initial={{opacity:0, y:50}} 
+                whileInView={{opacity:1, y:0}} 
+                viewport={{once:true}} 
+                transition={{duration:0.5, delay:i*0.1}} 
+                whileHover={{ scale: 1.05, boxShadow: "0px 10px 30px rgba(212,175,55,0.2)" }} 
+                className="min-w-[85vw] sm:min-w-[300px] max-w-[300px] bg-dark p-8 sm:p-10 rounded-xl border border-white/5 hover:border-gold/50 transition-all snap-center"
+              >
                 <s.icon className="text-gold text-5xl mb-4 mx-auto" />
-                <h3 className="text-2xl font-bold mb-3 font-cinzel text-center">{s.title}</h3>
-                <p className="text-gray-400 text-center">{s.desc}</p>
+                <h3 className="text-xl sm:text-2xl font-bold mb-3 font-cinzel text-center">{s.title}</h3>
+                <p className="text-gray-400 text-sm sm:text-base text-center">{s.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -195,7 +206,15 @@ export default function Home() {
         <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-cinzel">What We Offer</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {features.map((f, i) => (
-            <motion.div key={i} initial={{opacity:0, y:30}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.4, delay:i*0.1}} className="bg-dark2 p-6 rounded-xl flex items-center gap-4 border border-gold/10">
+            <motion.div 
+              key={i} 
+              initial={{opacity:0, y:30}} 
+              whileInView={{opacity:1, y:0}} 
+              viewport={{once:true}} 
+              transition={{duration:0.4, delay:i*0.1}} 
+              whileHover={{ scale: 1.03 }}
+              className="bg-dark2 p-6 rounded-xl flex items-center gap-4 border border-gold/10 hover:border-gold/40 transition-colors"
+            >
               <div className="bg-gold/10 p-3 rounded-lg"><f.icon className="text-gold text-2xl w-6 h-6" /></div>
               <div>
                 <h3 className="text-xl font-bold text-white">{f.title}</h3>
@@ -212,9 +231,17 @@ export default function Home() {
           <button onClick={() => scroll(imagesRef, -1)} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-dark p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors">
             <ChevronLeft size={24} />
           </button>
-          <div ref={imagesRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 px-10 no-scrollbar">
+          <div ref={imagesRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory snap-always pb-4 px-10 no-scrollbar">
             {images.map((img, i) => (
-              <motion.div key={i} initial={{opacity:0, scale:0.9}} whileInView={{opacity:1, scale:1}} viewport={{once:true}} transition={{duration:0.5}} className="min-w-[300px] h-[400px] rounded-2xl overflow-hidden border-2 border-gold/20 hover:border-gold/60 transition-all snap-center">
+              <motion.div 
+                key={i} 
+                initial={{opacity:0, scale:0.9}} 
+                whileInView={{opacity:1, scale:1}} 
+                viewport={{once:true}} 
+                transition={{duration:0.5}} 
+                whileHover={{ scale: 1.02 }}
+                className="min-w-[85vw] sm:min-w-[300px] h-[350px] sm:h-[400px] rounded-2xl overflow-hidden border-2 border-gold/20 hover:border-gold/60 transition-all snap-center"
+              >
                 <img src={img} alt={"Faded Barbershop " + (i+1)} className="w-full h-full object-cover" />
               </motion.div>
             ))}
@@ -243,17 +270,25 @@ export default function Home() {
             <button onClick={() => scroll(reviewsRef, -1)} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-dark2 p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors">
               <ChevronLeft size={24} />
             </button>
-            <div ref={reviewsRef} className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 px-10 no-scrollbar">
+            <div ref={reviewsRef} className="flex gap-6 overflow-x-auto snap-x snap-mandatory snap-always scroll-smooth pb-4 px-10 no-scrollbar">
               {reviews.map((r, i) => (
-                <motion.div key={i} initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.5, delay:i*0.05}} className="min-w-[300px] max-w-[300px] bg-dark2 p-8 rounded-xl border border-white/5 flex flex-col snap-center hover:border-gold/40 transition-all">
+                <motion.div 
+                  key={i} 
+                  initial={{opacity:0, y:50}} 
+                  whileInView={{opacity:1, y:0}} 
+                  viewport={{once:true}} 
+                  transition={{duration:0.5, delay:i*0.05}} 
+                  whileHover={{ scale: 1.03, boxShadow: "0px 10px 30px rgba(212,175,55,0.15)" }}
+                  className="min-w-[85vw] sm:min-w-[300px] max-w-[300px] bg-dark2 p-6 sm:p-8 rounded-xl border border-white/5 flex flex-col snap-center hover:border-gold/40 transition-all"
+                >
                   <div className="flex justify-between items-center mb-4">
-                    <h4 className="text-xl font-bold text-white font-cinzel">{r.name}</h4>
+                    <h4 className="text-lg sm:text-xl font-bold text-white font-cinzel">{r.name}</h4>
                     <span className="text-xs text-gray-500">{r.date}</span>
                   </div>
                   <div className="flex gap-1 mb-4">
                     {[...Array(r.rating)].map((_, j) => <Star key={j} className="text-gold fill-gold w-5 h-5" />)}
                   </div>
-                  <p className="text-gray-400 italic flex-grow">"{r.text}"</p>
+                  <p className="text-gray-400 italic flex-grow text-sm sm:text-base">"{r.text}"</p>
                 </motion.div>
               ))}
             </div>
@@ -291,7 +326,9 @@ export default function Home() {
           </div>
         </div>
         <div className="text-center mt-12">
-          <a href="https://www.google.com/maps/place/Faded+Barbershop/@54.832399,-112.5333398,7z/data=!4m6!3m5!1s0x53a023cf8bd7bd03:0xb41bd5e899d57e96!8m2!3d53.5853054!4d-113.4435655!16s%2Fg%2F11fll5qhc8?entry=ttu&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" className="btn-3d">Get Directions</a>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="inline-block">
+            <a href="https://www.google.com/maps/place/Faded+Barbershop/@54.832399,-112.5333398,7z/data=!4m6!3m5!1s0x53a023cf8bd7bd03:0xb41bd5e899d57e96!8m2!3d53.5853054!4d-113.4435655!16s%2Fg%2F11fll5qhc8?entry=ttu&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" className="btn-3d">Get Directions</a>
+          </motion.div>
         </div>
       </section>
 
@@ -328,5 +365,5 @@ export default function Home() {
 Set-Content -Path "app\page.jsx" -Value $page -Encoding UTF8 -Force
 
 Write-Host "==========================================" -ForegroundColor Green
-Write-Host "SUCCESS! Audio timing, FAQ title, and Logo restored." -ForegroundColor Green
+Write-Host "SUCCESS! Premium feel applied. Audio 2s, Mobile locked, Alive animations." -ForegroundColor Green
 Write-Host "==========================================" -ForegroundColor Green
