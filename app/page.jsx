@@ -1,7 +1,7 @@
 ﻿'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath, Volume2, VolumeX, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 const images = [
@@ -91,8 +91,6 @@ const explodeItems = [
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isMuted, setIsMuted] = useState(false);
-  const audioRef = useRef(null);
   const servicesRef = useRef(null);
   const imagesRef = useRef(null);
   const reviewsRef = useRef(null);
@@ -104,58 +102,14 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const audio = audioRef.current;
-    
-    // Attempt to play at 2 seconds
-    const audioTimer = setTimeout(() => {
-      if (audio) {
-        audio.play().catch(() => {
-          // If blocked, listen for the absolute first interaction on the window
-          const startAudio = () => {
-            if (audio) {
-              audio.play().catch(e => console.log("Still blocked", e));
-            }
-            window.removeEventListener('click', startAudio);
-            window.removeEventListener('touchend', startAudio);
-            window.removeEventListener('keydown', startAudio);
-            window.removeEventListener('wheel', startAudio);
-          };
-          window.addEventListener('click', startAudio);
-          window.addEventListener('touchend', startAudio);
-          window.addEventListener('keydown', startAudio);
-          window.addEventListener('wheel', startAudio);
-        });
-      }
-    }, 2000);
-
     const loadingTimer = setTimeout(() => {
       setIsLoading(false);
     }, 4000);
-
-    return () => {
-      clearTimeout(audioTimer);
-      clearTimeout(loadingTimer);
-    };
+    return () => clearTimeout(loadingTimer);
   }, []);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.muted = isMuted;
-    }
-  }, [isMuted]);
 
   return (
     <div>
-      <audio ref={audioRef} src="/audiobarber.wav" loop preload="auto" />
-      <motion.button 
-        whileHover={{ scale: 1.1 }} 
-        whileTap={{ scale: 0.9 }} 
-        onClick={() => setIsMuted(!isMuted)} 
-        className="fixed bottom-5 right-5 z-[60] bg-dark2 p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors shadow-lg"
-      >
-        {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
-      </motion.button>
-
       <AnimatePresence>
         {isLoading && (
           <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden">

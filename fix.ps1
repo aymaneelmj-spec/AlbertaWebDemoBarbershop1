@@ -1,11 +1,100 @@
-﻿# fix21.ps1
+﻿# fix22.ps1
 # Right-click this file and select "Run with PowerShell"
 
+# 1. Create the global AudioPlayer component
+ $audioPlayer = @"
+'use client';
+import { useState, useEffect, useRef } from 'react';
+import { Volume2, VolumeX } from 'lucide-react';
+
+export default function AudioPlayer() {
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // Attempt to play after 2 seconds
+    const audioTimer = setTimeout(() => {
+      audio.play().catch(() => {
+        // If blocked, listen for the absolute first interaction on the window
+        const startAudio = () => {
+          audio.play().catch(e => console.log("Still blocked", e));
+          window.removeEventListener('click', startAudio);
+          window.removeEventListener('touchstart', startAudio);
+          window.removeEventListener('keydown', startAudio);
+          window.removeEventListener('scroll', startAudio);
+        };
+        window.addEventListener('click', startAudio);
+        window.addEventListener('touchstart', startAudio);
+        window.addEventListener('keydown', startAudio);
+        window.addEventListener('scroll', startAudio, { passive: true });
+      });
+    }, 2000);
+
+    return () => clearTimeout(audioTimer);
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
+
+  return (
+    <>
+      <audio ref={audioRef} src="/audiobarber.wav" loop preload="auto" />
+      <button 
+        onClick={() => setIsMuted(!isMuted)} 
+        className="fixed bottom-5 right-5 z-[60] bg-dark2 p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors shadow-lg"
+      >
+        {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+      </button>
+    </>
+  );
+}
+"@
+Set-Content -Path "components\AudioPlayer.jsx" -Value $audioPlayer -Encoding UTF8 -Force
+
+# 2. Update layout.jsx to include the AudioPlayer globally
+ $layout = @"
+import './globals.css';
+import Navbar from '../components/Navbar';
+import AudioPlayer from '../components/AudioPlayer';
+
+export const metadata = {
+  title: 'Faded Barbershop',
+  description: "Edmonton's Finest Barbershop",
+  icons: { icon: '/icon.svg' }
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className="overflow-x-hidden">
+        <AudioPlayer />
+        <Navbar />
+        {children}
+      </body>
+    </html>
+  );
+}
+"@
+Set-Content -Path "app\layout.jsx" -Value $layout -Encoding UTF8 -Force
+
+# 3. Update page.jsx to remove the audio code (since it's now global)
  $page = @"
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath, Volume2, VolumeX, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 const images = [
@@ -95,8 +184,6 @@ const explodeItems = [
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isMuted, setIsMuted] = useState(false);
-  const audioRef = useRef(null);
   const servicesRef = useRef(null);
   const imagesRef = useRef(null);
   const reviewsRef = useRef(null);
@@ -108,58 +195,14 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const audio = audioRef.current;
-    
-    // Attempt to play at 2 seconds
-    const audioTimer = setTimeout(() => {
-      if (audio) {
-        audio.play().catch(() => {
-          // If blocked, listen for the absolute first interaction on the window
-          const startAudio = () => {
-            if (audio) {
-              audio.play().catch(e => console.log("Still blocked", e));
-            }
-            window.removeEventListener('click', startAudio);
-            window.removeEventListener('touchend', startAudio);
-            window.removeEventListener('keydown', startAudio);
-            window.removeEventListener('wheel', startAudio);
-          };
-          window.addEventListener('click', startAudio);
-          window.addEventListener('touchend', startAudio);
-          window.addEventListener('keydown', startAudio);
-          window.addEventListener('wheel', startAudio);
-        });
-      }
-    }, 2000);
-
     const loadingTimer = setTimeout(() => {
       setIsLoading(false);
     }, 4000);
-
-    return () => {
-      clearTimeout(audioTimer);
-      clearTimeout(loadingTimer);
-    };
+    return () => clearTimeout(loadingTimer);
   }, []);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.muted = isMuted;
-    }
-  }, [isMuted]);
 
   return (
     <div>
-      <audio ref={audioRef} src="/audiobarber.wav" loop preload="auto" />
-      <motion.button 
-        whileHover={{ scale: 1.1 }} 
-        whileTap={{ scale: 0.9 }} 
-        onClick={() => setIsMuted(!isMuted)} 
-        className="fixed bottom-5 right-5 z-[60] bg-dark2 p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors shadow-lg"
-      >
-        {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
-      </motion.button>
-
       <AnimatePresence>
         {isLoading && (
           <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden">
@@ -387,5 +430,5 @@ export default function Home() {
 Set-Content -Path "app\page.jsx" -Value $page -Encoding UTF8 -Force
 
 Write-Host "==========================================" -ForegroundColor Green
-Write-Host "SUCCESS! Audio logic forced. Clickable address added." -ForegroundColor Green
+Write-Host "SUCCESS! Audio is now global. It will play continuously everywhere." -ForegroundColor Green
 Write-Host "==========================================" -ForegroundColor Green
