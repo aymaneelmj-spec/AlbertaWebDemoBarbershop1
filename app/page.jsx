@@ -1,7 +1,7 @@
 ﻿'use client';
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Scissors, Clock, MapPin, Phone, Sparkles, Star, ChevronDown, Accessibility, CreditCard, Baby, UserCheck, Bath, Volume2, VolumeX } from 'lucide-react';
 import Link from 'next/link';
 const heroBg = "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80^&w=2070^&auto=format^&fit=crop";
 const images = [
@@ -11,9 +11,12 @@ const images = [
   "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmevhZ4AIxV_D3K-a42DFiivGQa0SEMPOsMmcJpymIFMbFo05E-NnC4HjqAgHM201xadbcGF5l43Bte-zpHCTckQBbbH32TFDYsgAGA6XmGvTOAAsIYk7qGXZcqkVj7wj_wmphS5dcGXO59=w203-h287-k-no"
 ];
 const services = [
-  { icon: Scissors, title: 'Classic Cuts', desc: 'Timeless styles tailored to your preference.' },
-  { icon: Sparkles, title: 'Skin Fades', desc: 'Seamless blends from skin to length.' },
-  { icon: Clock, title: 'Beard Grooming', desc: 'Razor-sharp lineups and beard sculpting.' }
+  { icon: Scissors, title: 'Classic Haircut', desc: 'Timeless styles tailored to your preference, from scissor cuts to clippers.' },
+  { icon: Sparkles, title: 'Skin Fades', desc: 'Seamless blends from skin to length for a sharp, modern look.' },
+  { icon: UserCheck, title: 'Beard Sculpting', desc: 'Razor-sharp lineups and beard trims to keep your facial hair fresh.' },
+  { icon: Baby, title: "Kids' Cuts", desc: 'Patient and friendly haircuts for your little ones in a comfortable environment.' },
+  { icon: Bath, title: 'Hot Towel Shave', desc: 'Traditional straight razor shave with a hot towel for the ultimate clean feel.' },
+  { icon: Sparkles, title: 'Haircut 
 ];
 const features = [
   { icon: Accessibility, title: 'Accessibility', desc: 'Wheelchair accessible entrance & parking.' },
@@ -71,9 +74,51 @@ const GoogleLogo = () => (
     <path fill="#4285F4" d="M35.29 41.41V32H67c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 34.91.36 15.93 16.32.47 35.3.47c10.5 0 17.98 4.12 23.6 9.49l-6.64 6.64c-4.03-3.78-9.49-6.72-16.97-6.72-13.86 0-24.7 11.17-24.7 25.03 0 13.86 10.84 25.03 24.7 25.03 8.99 0 14.11-3.61 17.39-6.89 2.66-2.66 4.41-6.46 5.1-11.65l-22.49.01z"/>
   </svg>
 );
+const explodeEmojis = [
+  { emoji: 'âœ‚ï¸', x: -300, y: -200 },
+  { emoji: 'ðŸ’ˆ', x: 300, y: -200 },
+  { emoji: 'âœ¨', x: -300, y: 200 },
+  { emoji: 'âœ‚ï¸', x: 300, y: 200 },
+  { emoji: 'ðŸ’ˆ', x: 0, y: -400 },
+  { emoji: 'âœ¨', x: 0, y: 400 }
+];
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef(null);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      if (audioRef.current) {
+        audioRef.current.play().catch(e => console.log("Autoplay blocked"));
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
   return (
     <div>
+      <audio ref={audioRef} src="/audiobarber.mp3" loop />
+      <button onClick={() => setIsMuted(!isMuted)} className="fixed bottom-5 right-5 z-[60] bg-dark2 p-3 rounded-full border border-gold/30 text-gold hover:bg-gold hover:text-black transition-colors">
+        {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+      </button>
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden">
+            {explodeEmojis.map((e, i) => (
+              <motion.span key={i} style={{ position: 'absolute', fontSize: '3rem' }} initial={{ x: 0, y: 0, opacity: 0, scale: 0 }} animate={{ x: e.x, y: e.y, opacity: [0, 1, 0], scale: [0, 1.5, 0], rotate: 360 }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}>{e.emoji}</motion.span>
+            ))}
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }} className="z-10 text-center">
+              <h1 className="text-5xl font-bold text-gold font-cinzel">FADED</h1>
+              <p className="text-white text-2xl tracking-widest font-cinzel">BARBERSHOP</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <header className="min-h-screen flex flex-col justify-center items-center text-center relative">
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black z-10"></div>
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }}></div>
@@ -117,16 +162,16 @@ export default function Home() {
       </section>
       <section id="gallery" className="py-24 bg-dark2 px-6">
         <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-cinzel">Our Shop</h2>
-        <div className="flex gap-4 overflow-x-auto pb-4 max-w-7xl mx-auto scroll-smooth">
+        <div className="flex gap-4 overflow-x-auto pb-4 max-w-7xl mx-auto scroll-smooth snap-x">
           {images.map((img, i) => (
-            <motion.div key={i} initial={{opacity:0, scale:0.9}} whileInView={{opacity:1, scale:1}} viewport={{once:true}} transition={{duration:0.5}} className="min-w-[300px] h-[400px] rounded-2xl overflow-hidden border-2 border-gold/20 hover:border-gold/60 transition-all">
+            <motion.div key={i} initial={{opacity:0, scale:0.9}} whileInView={{opacity:1, scale:1}} viewport={{once:true}} transition={{duration:0.5}} className="min-w-[300px] h-[400px] rounded-2xl overflow-hidden border-2 border-gold/20 hover:border-gold/60 transition-all snap-center">
               <img src={img} alt={`Faded Barbershop ${i+1}`} className="w-full h-full object-cover" />
             </motion.div>
           ))}
         </div>
       </section>
       <section id="reviews" className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center gap-4 mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-center font-cinzel">Customer Reviews</h2>
             <div className="bg-dark2 p-4 rounded-xl flex items-center gap-3 border border-gold/20">
@@ -139,9 +184,9 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth">
             {reviews.map((r, i) => (
-              <motion.div key={i} initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.5, delay:i*0.1}} className="bg-dark2 p-8 rounded-xl border border-white/5 flex flex-col">
+              <motion.div key={i} initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration:0.5, delay:i*0.05}} className="min-w-[300px] max-w-[300px] bg-dark2 p-8 rounded-xl border border-white/5 flex flex-col snap-center hover:border-gold/40 transition-all">
                 <div className="flex justify-between items-center mb-4">
                   <h4 className="text-xl font-bold text-white font-cinzel">{r.name}</h4>
                   <span className="text-xs text-gray-500">{r.date}</span>
